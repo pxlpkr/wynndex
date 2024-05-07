@@ -1,0 +1,11 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "target": "es2017",
+        "outDir": "js",
+        "removeComments": true
+    },
+    "include": [
+        "ts/*.ts"
+    ]
+}
