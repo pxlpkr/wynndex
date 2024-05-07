@@ -1,0 +1,244 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0px;
+
+    overflow: hidden;
+}
+
+.initial-fade {
+    animation: fade-in 0.15s ease-out forwards;
+}
+
+.ui-panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 256px;
+    height: auto;
+
+    background-color: #555555bb;
+}
+
+.ui-move-bar {
+    background-color: #333333;
+    width: 100%;
+    height: 32px;
+}
+
+.ui-tabs {
+    display: table;
+    table-layout: fixed;
+    border-collapse: collapse;
+
+    background-color: #444444;
+    width: 100%;
+}
+
+.ui-tabs-row {
+    display: table-row;
+}
+
+.ui-tab {
+    display: table-cell;
+    cursor: pointer;
+
+    height: 24px;
+
+    color: #ffffff;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 14px;
+    border: 1px solid #888;
+
+    transition: 0.1s;
+}
+
+.ui-tab:hover {
+    background-color: #666666;
+}
+
+.ui-nav-button {
+    cursor: pointer;
+
+    background-color: #ffffff00;
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-style: none;
+    border-radius: 5px;
+
+    height: 28px;
+    width: 28px;
+}
+
+.ui-nav-button:hover {
+    background-color: #ffffff33;
+}
+
+.ui-close {
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/7/72/VisualEditor_-_Icon_-_Close_-_white.svg');
+    float: right;
+}
+
+.ui-left {
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Jsdx-gauche.svg/1920px-Jsdx-gauche.svg.png');
+    float: left;
+    background-size: 60% 50%;
+}
+
+.ui-right {
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Jsdx-droite.svg/1920px-Jsdx-droite.svg.png');
+    float: left;
+    background-size: 60% 50%;
+}
+
+.ui-inactive {
+    cursor: auto;
+    opacity: 0.2;
+}
+
+.ui-content {
+    width: 100%;
+
+    height: auto;
+    max-height: 256px;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow-y: scroll;
+    padding-bottom: 10px;
+}
+
+.ui-container {
+    width: calc(100%);
+
+    display: flex;
+    flex-direction: column;
+}
+
+.ui-center {
+    justify-content: center;
+}
+
+.ui-padded {
+    padding: 10px 10px 0px 10px;
+}
+
+.ui-horizontal {
+    flex-direction: row;
+}
+
+.ui-slider {
+    width: 100%;
+}
+
+.ui-label {
+    color: #ffffff;
+    display: block;
+
+    margin-bottom: 0px;
+    text-transform: capitalize;
+
+    font-size: 16px;
+}
+
+.ui-separator {
+    color: #ffffff;
+    width: 100%;
+    margin: 5px 0 17px 0;
+}
+
+.center-text {
+    text-align: center;
+}
+
+.broad-text {
+    margin-bottom: 10px;
+}
+
+.small-text {
+    font-size: 14px;
+}
+
+.title-text {
+    font-weight: 800;
+    font-size: 22px;
+}
+
+.ui-img {
+    box-shadow: 0 0 15px black;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.ui-img-inline {
+    display: flex;
+    height: 24px;
+    box-shadow: 0 0 5px white;
+    justify-content: center;
+}
+
+.ui-info-box {
+    color: #ffffffbb;
+    background-color: #00000044;
+    border: 1px solid #000000;
+    padding: 3px 3px 1px 3px;
+    border-radius: 5px;
+    text-shadow: 0 0 15px #000000;
+    transition: 0.1s;
+    margin: 2px;
+}
+
+.ui-redirect {
+    color: #ffffff;
+    cursor: pointer;
+    background-color: #00000066;
+    border: 1px solid #ffffff88;
+    text-shadow: 0 0 15px #ffd700;
+}
+
+.ui-redirect:hover {
+    text-shadow: 0 0 15px #00d7ff;
+    border: 1px solid #ffffff;
+}
+
+
+.black {
+    background-image: url("/client/image/clouds.png");
+    background-size: cover;
+    opacity: 1;
+    /* background-color: #000000; */
+}
+
+.white {
+    background-color: #ffffff;
+}
+
+.is-fading-out {
+    animation: fade-out 0.15s ease-in forwards;
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+        translate: 0px 20px;
+    } 100% {
+        opacity: 1;
+        translate: 0px 0px;
+    }
+}
+
+@keyframes fade-out {
+    0% {
+        opacity: 1;
+        translate: 0px 0px;
+    } 100% {
+        opacity: 0;
+        translate: 0px 20px;
+    }
+}

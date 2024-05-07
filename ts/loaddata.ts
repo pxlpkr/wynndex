@@ -7,7 +7,6 @@ async function wdload_quests() {
                 .catch(err => {throw err});
         })
     })();
-    console.log(quests);
     return quests;
 }
 

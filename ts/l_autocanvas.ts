@@ -4,13 +4,9 @@ enum ACC_EaseType {
 
 enum ACC_EventType {
     HOVER,
+    PRESS,
     CLICK,
     RELEASE
-}
-
-enum ACC_ComponentState {
-    IDLE,
-    HOVERING
 }
 
 class ACC_Task {
@@ -73,13 +69,22 @@ class ACC_Dynamic {
 
 class ACC_Component {
     parent: AutoCanvas;
-    state: ACC_ComponentState = ACC_ComponentState.IDLE;
+    render_ignore_translation: boolean = false;
+    render_ignore_scaling: boolean = false;
+    render_hoisted: boolean = false;
+    render_base_scale: ACC_Dynamic = new ACC_Dynamic(1);
 
     x: ACC_Dynamic = new ACC_Dynamic(0);
     y: ACC_Dynamic = new ACC_Dynamic(0);
 
+    is_hovering: boolean = false;
+    is_clicked: boolean = false;
+
     on_hover: (c: ACC_Component) => void = () => {};
     on_hover_stop: (c: ACC_Component) => void = () => {};
+    on_press: (c: ACC_Component) => void = () => {};
+    on_click: (c: ACC_Component) => void = () => {};
+    on_release: (c: ACC_Component) => void = () => {};
 
     constructor(parent: AutoCanvas, x: number, y: number) {
         this.parent = parent;
@@ -100,10 +105,7 @@ class ACC_Component {
 
 class ACC_Image extends ACC_Component {
     img: HTMLImageElement;
-    render_ignore_scaling: boolean = false;
     render_centered: boolean = false;
-
-    render_base_scale: ACC_Dynamic = new ACC_Dynamic(1);
 
     tick(dt: number): void {
         super.tick(dt);
@@ -134,6 +136,9 @@ class ACC_Image extends ACC_Component {
     }
     
     get_render_x(transform: TransformStateType) {
+        if (this.render_ignore_translation) {
+            return this.x.get();
+        }
         let x = this.x.get() * transform.scale + transform.x;
         if (this.render_centered) {
             x -= this.get_render_width(transform) / 2;
@@ -142,6 +147,9 @@ class ACC_Image extends ACC_Component {
     }
 
     get_render_y(transform: TransformStateType) {
+        if (this.render_ignore_translation) {
+            return this.y.get();
+        }
         let y = this.y.get() * transform.scale + transform.y;
         if (this.render_centered) {
             y -= this.get_render_height(transform) / 2;
@@ -154,14 +162,33 @@ class ACC_Image extends ACC_Component {
             client_x < this.get_render_x(transform) + this.get_render_width(transform) &&
             client_y > this.get_render_y(transform) &&
             client_y < this.get_render_y(transform) + this.get_render_height(transform));
-        if (type == ACC_EventType.HOVER) {
-            if (detected && this.state == ACC_ComponentState.IDLE) {
-                this.state = ACC_ComponentState.HOVERING;
-                this.on_hover(this);
-            } else if (!detected && this.state == ACC_ComponentState.HOVERING) {
-                this.state = ACC_ComponentState.IDLE;
-                this.on_hover_stop(this);
-            }
+        switch (type) {
+            case (ACC_EventType.HOVER): {
+                if (detected && !this.is_hovering) {
+                    this.is_hovering = true;
+                    this.on_hover(this);
+                } else if (!detected && this.is_hovering) {
+                    this.is_hovering = false;
+                    this.on_hover_stop(this);
+                }
+            } break;
+            case (ACC_EventType.PRESS): {
+                if (detected && !this.is_clicked) {
+                    this.is_clicked = true;
+                    this.on_press(this);
+                }
+            } break;
+            case (ACC_EventType.CLICK): {
+                if (detected) {
+                    this.on_click(this);
+                }
+            } // Fall through on purpose
+            case (ACC_EventType.RELEASE): {
+                if (this.is_clicked) {
+                    this.is_clicked = false;
+                    this.on_release(this);
+                }
+            } break;
         }
         return detected;
     };
@@ -174,7 +201,6 @@ class AutoCanvas {
         .unwrap();
     ctx: CanvasRenderingContext2D = wrap(this.canvas.getContext('2d'))
         .unwrap();
-    components: ACC_Component[] = [];
     mouse_state: MouseStateType = {
         pressed: false,
         pressed_x: 0,
@@ -184,13 +210,20 @@ class AutoCanvas {
     };
     transform: TransformStateType = {
         scale: 1,
-        x: 240,
-        y: 1970,
+        x: 0,
+        y: 0,
         buffered_x: 0,
         buffered_y: 0
     };
     render_loop_pid: number;
     debug_flag: boolean = true;
+
+    /* Components */
+    _components_civilian: ACC_Component[] = [];
+    _components_priority: ACC_Component[] = [];
+    get components(): ACC_Component[] {
+        return [].concat(this._components_civilian, this._components_priority);
+    }
 
     /* FPS Manipulation */
     _target_fps: number = 60;
@@ -220,6 +253,30 @@ class AutoCanvas {
             this.mouse_state.pressed_y = event.y;
             this.transform.buffered_x = this.transform.x;
             this.transform.buffered_y = this.transform.y;
+
+            /* on_click */
+            let found = false;
+            for (let i = this.components.length - 1; i >= 0; i--) {
+                if (this.components[i].collide(this.transform, event.x, event.y, ACC_EventType.PRESS, found)) {
+                    found = true;
+                }
+            }
+        });
+
+        document.addEventListener("mouseup", (event) => {
+            if (this.mouse_state.pressed) {
+                this.mouse_state.pressed = false;
+            }
+
+            /* on_release */
+            let found = false;
+            let drag_distance = ((this.mouse_state.pressed_x - event.x) ** 2 + (this.mouse_state.pressed_y - event.y) ** 2) ** 0.5;
+            let event_type = drag_distance < 5 ? ACC_EventType.CLICK : ACC_EventType.RELEASE
+            for (let i = this.components.length - 1; i >= 0; i--) {
+                if (this.components[i].collide(this.transform, event.x, event.y, event_type, found)) {
+                    found = true;
+                }
+            }
         });
 
         document.addEventListener("mousemove", (event) => {
@@ -234,17 +291,12 @@ class AutoCanvas {
                                        - this.mouse_state.pressed_y;
             }
 
+            /* on_hover */
             let found = false;
             for (let i = this.components.length - 1; i >= 0; i--) {
                 if (this.components[i].collide(this.transform, event.x, event.y, ACC_EventType.HOVER, found)) {
                     found = true;
                 }
-            }
-        });
-
-        document.addEventListener("mouseup", (event) => {
-            if (this.mouse_state.pressed) {
-                this.mouse_state.pressed = false;
             }
         });
 
@@ -264,10 +316,15 @@ class AutoCanvas {
         let scaleAmount = Math.pow(SCALE_STRENGTH, -amount);
         scaleAmount = Math.max(Math.min(scaleAmount, SCALE_AMT_MAX), SCALE_AMT_MIN);
 
-        this.transform.scale *= scaleAmount;
+        this.raw_zoom(scaleAmount, about_x, about_y)
+    }
+
+    raw_zoom(amount: number, about_x: number, about_y: number) {
+        const SCALE_MIN = 0.1, SCALE_MAX = 15;
+        this.transform.scale *= amount;
         this.transform.scale = Math.max(Math.min(this.transform.scale, SCALE_MAX), SCALE_MIN);
-        this.transform.x = (this.transform.x) * scaleAmount - about_x * (scaleAmount-1);
-        this.transform.y = (this.transform.y) * scaleAmount - about_y * (scaleAmount-1);
+        this.transform.x = (this.transform.x) * amount - about_x * (amount-1);
+        this.transform.y = (this.transform.y) * amount - about_y * (amount-1);
     }
 
     correctDimensions(): void {
@@ -278,7 +335,11 @@ class AutoCanvas {
     }
 
     addComponent(component: ACC_Component): void {
-        this.components.push(component);
+        if (component.render_hoisted) {
+            this._components_priority.push(component);
+        } else {
+            this._components_civilian.push(component);
+        }
     }
 
     refresh() {
@@ -287,7 +348,8 @@ class AutoCanvas {
         for (const component of this.components) {
             component.tick(1000 / this.target_fps);
         }
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.fillStyle = "#292929";
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         for (const component of this.components) {
             component.refresh(this.ctx, this.transform);
         }

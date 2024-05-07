@@ -1,3 +1,37 @@
+* {
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+@font-face {
+    font-family: Wynncraft;
+    src: url('../rsc/WynncraftResource-Regular.ttf');
+}
+
+.ui-content {
+    font-family: Wynncraft, Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
+}
+
+.title-text {
+    font-weight: 800 !important;
+    font-size: 32px !important;
+}
+
+.small-text {
+    font-size: 24px !important;
+}
+
+.ui-move-bar {
+    border-bottom-color: #cf6d0c;
+    border-bottom-width: 4px;
+    border-bottom-style: solid;
+}
+
+/* .ui-panel {
+    background-color: #d9a80bbb !important;
+} */
+
 .autoCanvas {
     position: absolute;
     width: 100vw;   height: 100vh;
