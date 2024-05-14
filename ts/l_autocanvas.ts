@@ -37,17 +37,29 @@ class ACC_Task {
 
 class ACC_Dynamic {
     raw: number;
+    callback: () => number;
 
     constructor(value: number) {
         this.raw = value;
     }
 
-    set(value: number): void {
-        this.raw = value;
+    set(value: number | (() => number)): void {
+        if (typeof(value) == "number") {
+            this.raw = value;
+        } else {
+            this.callback = value;
+            this.fix();
+        }
     }
 
     get(): number {
         return this.raw;
+    }
+
+    fix(): void {
+        if (this.callback) {
+            this.raw = this.callback();
+        }
     }
 
     /* Tasks */
@@ -80,6 +92,10 @@ class ACC_Component {
     is_hovering: boolean = false;
     is_clicked: boolean = false;
 
+    on_resize: (c: ACC_Component) => void = () => {
+        this.x.fix();
+        this.y.fix();
+    };
     on_hover: (c: ACC_Component) => void = () => {};
     on_hover_stop: (c: ACC_Component) => void = () => {};
     on_press: (c: ACC_Component) => void = () => {};
@@ -194,6 +210,45 @@ class ACC_Image extends ACC_Component {
     };
 }
 
+// class ACC_Foreign extends ACC_Component {
+//     pointer: any;
+//     render_centered: boolean = false;
+
+//     tick(dt: number): void {
+//         super.tick(dt);
+//     };
+
+//     refresh(ctx: CanvasRenderingContext2D, transform: TransformStateType): void {
+//         ctx.drawImage(this.img, 
+//             this.get_render_x(transform), this.get_render_y(transform),
+//             this.get_render_width(transform), this.get_render_height(transform)
+//         );
+//     }
+    
+//     get_render_x(transform: TransformStateType) {
+//         if (this.render_ignore_translation) {
+//             return this.x.get();
+//         }
+//         let x = this.pose(transform, this.x.get());
+//         let x = this.x.get() * transform.scale + transform.x;
+//         if (this.render_centered) {
+//             x -= this.get_render_width(transform) / 2;
+//         }
+//         return x;
+//     }
+
+//     get_render_y(transform: TransformStateType) {
+//         if (this.render_ignore_translation) {
+//             return this.y.get();
+//         }
+//         let y = this.y.get() * transform.scale + transform.y;
+//         if (this.render_centered) {
+//             y -= this.get_render_height(transform) / 2;
+//         }
+//         return y;
+//     }
+// }
+
 class AutoCanvas {
     canvas: HTMLCanvasElement = wrap(document.createElement('canvas'))
         .set('className', 'autoCanvas')
@@ -242,11 +297,7 @@ class AutoCanvas {
         this.render_loop_pid = setInterval(this.refresh.bind(this), 1000 / this.target_fps);
     }
 
-    registerEventListeners() {
-        window.addEventListener('resize', () => {
-            this.correctDimensions();
-        });
-        
+    registerEventListeners() {        
         this.canvas.addEventListener("mousedown", (event) => {
             this.mouse_state.pressed = true;
             this.mouse_state.pressed_x = event.x;
@@ -301,7 +352,11 @@ class AutoCanvas {
         });
 
         window.addEventListener("resize", (event) => {
+            this.correctDimensions();
             this.refresh();
+            for (const comp of this.components) {
+                comp.on_resize(comp);
+            }
         });
 
         this.canvas.addEventListener("wheel", (event) => {

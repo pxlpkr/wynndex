@@ -13,13 +13,21 @@
     font-family: Wynncraft, Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
 }
 
-.title-text {
+.ui-panel {
+    width: 384px !important;
+}
+
+.ui-title {
     font-weight: 800 !important;
-    font-size: 32px !important;
+    font-size: 30px !important;
+}
+
+.ui-subtitle {
+    font-size: 24px !important;
 }
 
 .small-text {
-    font-size: 24px !important;
+    font-size: 22px !important;
 }
 
 .ui-move-bar {

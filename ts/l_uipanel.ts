@@ -37,6 +37,7 @@ type GenerateOptions = {
 type UIPanelConstructionType = {
     include_close?: boolean,
     include_navigation?: boolean,
+    allow_dragging?: boolean,
     unique_id?: string,
     generator: GenerateOptions,
     at?: [number, number]
@@ -102,28 +103,30 @@ class UIPanel {
             this.panel.parentNode.appendChild(this.panel);
         })
 
-        this.bar.addEventListener('mousedown', (e: MouseEvent) => {
-            var x = e.clientX, y = e.clientY;
-            var panel_x = this.panel.offsetLeft, panel_y = this.panel.offsetTop;
+        if (args.allow_dragging) {
+            this.bar.addEventListener('mousedown', (e: MouseEvent) => {
+                var x = e.clientX, y = e.clientY;
+                var panel_x = this.panel.offsetLeft, panel_y = this.panel.offsetTop;
 
-            function on_mouse_up(e: MouseEvent) {
-                document.removeEventListener('mouseup', on_mouse_up_bind);
-                document.removeEventListener('mousemove', on_mouse_move_bind);
-            }
+                function on_mouse_up(e: MouseEvent) {
+                    document.removeEventListener('mouseup', on_mouse_up_bind);
+                    document.removeEventListener('mousemove', on_mouse_move_bind);
+                }
 
-            function on_mouse_move(e: MouseEvent) {
-                this.panel.style.top = `${panel_y + e.clientY - y}px`;
-                this.panel.style.left = `${panel_x + e.clientX - x}px`;
-    
-                this.updateContentSize();
-            }
+                function on_mouse_move(e: MouseEvent) {
+                    this.panel.style.top = `${panel_y + e.clientY - y}px`;
+                    this.panel.style.left = `${panel_x + e.clientX - x}px`;
+        
+                    this.updateContentSize();
+                }
 
-            let on_mouse_up_bind = on_mouse_up.bind(this);
-            let on_mouse_move_bind = on_mouse_move.bind(this);
+                let on_mouse_up_bind = on_mouse_up.bind(this);
+                let on_mouse_move_bind = on_mouse_move.bind(this);
 
-            document.addEventListener('mouseup', on_mouse_up_bind);
-            document.addEventListener('mousemove', on_mouse_move_bind);
-        });
+                document.addEventListener('mouseup', on_mouse_up_bind);
+                document.addEventListener('mousemove', on_mouse_move_bind);
+            });
+        }
 
         /* Building Tabs Bar */
         this.tabs = fast("div", {className: "ui-tabs"});

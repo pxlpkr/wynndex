@@ -41,3 +41,37 @@ type JSONFormat_WynntilsCave = {
       "z": number
     }
   }
+
+type JSONFormat_ContentItem = {
+    "type": string,
+    "name": string,
+    "specialInfo": string,
+    "description": string,
+    "length": string,
+    "lengthInfo": string,
+    "difficulty": string,
+    "requirements": {
+      "level": number,
+      "professionLevels": {},
+      "quests": string[]
+    },
+    "rewards": string[],
+    "location": {
+        "x": number,
+        "y": number,
+        "z": number
+    } | null
+}
+
+type JSONFormat_Content = {
+    "quest": JSONFormat_ContentItem[],
+    "miniQuest": JSONFormat_ContentItem[],
+    "cave": JSONFormat_ContentItem[],
+    "secretDiscovery": JSONFormat_ContentItem[],
+    "worldDiscovery": JSONFormat_ContentItem[],
+    "territorialDiscovery": JSONFormat_ContentItem[],
+    "dungeon": JSONFormat_ContentItem[],
+    "raid": JSONFormat_ContentItem[],
+    "bossAltar": JSONFormat_ContentItem[],
+    "lootrunCamp": JSONFormat_ContentItem[]
+}
