@@ -9,6 +9,23 @@ enum ACC_EventType {
     RELEASE
 }
 
+/** Types */
+type MouseStateType = {
+    pressed: boolean,
+    pressed_x: number,
+    pressed_y: number,
+    x: number,
+    y: number;
+}
+
+type TransformStateType = {
+    x: number;
+    y: number;
+    buffered_x: number;
+    buffered_y: number;
+    scale: number,
+}
+
 class ACC_Task {
     delta: number;
     cur_ms: number = 0;
@@ -423,6 +440,13 @@ class AutoCanvas {
             this.ctx.fillText("Current MS: " + (this.render_time), 2, 42);
             this.ctx.fillStyle = "white";
             this.ctx.fillText("Current MS: " + (this.render_time), 0, 40);
+
+            let r_mouse_x = Math.round((this.mouse_state.x - this.transform.x) / this.transform.scale);
+            let r_mouse_y = Math.round((this.mouse_state.y - this.transform.y) / this.transform.scale);
+            this.ctx.fillStyle = "black";
+            this.ctx.fillText(`Looking at: (${r_mouse_x}, ${r_mouse_y})`, 2, 62);
+            this.ctx.fillStyle = "white";
+            this.ctx.fillText(`Looking at: (${r_mouse_x}, ${r_mouse_y})`, 0, 60);
         }
     }
 }

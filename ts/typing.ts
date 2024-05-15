@@ -1,48 +1,7 @@
-type MouseStateType = {
-    pressed: boolean,
-    pressed_x: number,
-    pressed_y: number,
-    x: number,
-    y: number;
-}
+type Dict<T> = {[id: string]: T}
 
-type TransformStateType = {
-    x: number;
-    y: number;
-    buffered_x: number;
-    buffered_y: number;
-    scale: number,
-}
-
-/* JSON Formatting */
-type JSONFormat_WynntilsMap = {
-    md5: string,
-    name: string,
-    url: string,
-    x1: number,
-    x2: number,
-    z1: number,
-    z2: number;
-}
-
-type JSONFormat_WynntilsCave = {
-    "type": string,
-    "name": string,
-    "specialInfo": string,
-    "description": string,
-    "length": string,
-    "lengthInfo": string,
-    "difficulty": string,
-    "requirements": number,
-    "rewards": string[],
-    "location": {
-      "x": number,
-      "y": number,
-      "z": number
-    }
-  }
-
-type JSONFormat_ContentItem = {
+/* Internal */
+type JSON_Content_Item = {
     "type": string,
     "name": string,
     "specialInfo": string,
@@ -61,17 +20,30 @@ type JSONFormat_ContentItem = {
         "y": number,
         "z": number
     } | null
+};
+
+/** 
+ * Wynntils
+ */
+type JSON_Wynntils_Map = {
+    md5: string,
+    name: string,
+    url: string,
+    x1: number,
+    x2: number,
+    z1: number,
+    z2: number;
 }
 
-type JSONFormat_Content = {
-    "quest": JSONFormat_ContentItem[],
-    "miniQuest": JSONFormat_ContentItem[],
-    "cave": JSONFormat_ContentItem[],
-    "secretDiscovery": JSONFormat_ContentItem[],
-    "worldDiscovery": JSONFormat_ContentItem[],
-    "territorialDiscovery": JSONFormat_ContentItem[],
-    "dungeon": JSONFormat_ContentItem[],
-    "raid": JSONFormat_ContentItem[],
-    "bossAltar": JSONFormat_ContentItem[],
-    "lootrunCamp": JSONFormat_ContentItem[]
-}
+type JSON_Wynntils_Content_Book = {
+    "quest": JSON_Content_Item[],
+    "miniQuest": JSON_Content_Item[],
+    "cave": JSON_Content_Item[],
+    "secretDiscovery": JSON_Content_Item[],
+    "worldDiscovery": JSON_Content_Item[],
+    "territorialDiscovery": JSON_Content_Item[],
+    "dungeon": JSON_Content_Item[],
+    "raid": JSON_Content_Item[],
+    "bossAltar": JSON_Content_Item[],
+    "lootrunCamp": JSON_Content_Item[]
+};

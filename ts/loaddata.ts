@@ -1,53 +1,79 @@
-async function wdload_quests() {
-    let quests: string[] = await (() => {
-        return new Promise((resolve) => {
-            fetch("wynn/quests/dir.json")
-                .then(res => res.json())
-                .then(out => resolve(out))
-                .catch(err => {throw err});
-        })
-    })();
-    return quests;
+const WYNNTILS_API_CONTENT_BOOK = "https://raw.githubusercontent.com/Wynntils/Static-Storage/main/Data-Storage/raw/content/content_book_dump.json";
+const WYNNDEX_API_CONTENT_BOOK = "https://raw.githubusercontent.com/wynndex/wynndex/main/api/content_book.json";
+
+/**
+ * Converts a JSON_Wynntils_Content_Book object obtained from Wynntils into
+ * a list of internal JSON_Content_Item(s)
+ * 
+ * @param   content JSON_Wynntils_Content_Book-encoded data
+ * @returns         JSON_Content_Item[]-encoded data
+ */
+function flatten_content(content: JSON_Wynntils_Content_Book): JSON_Content_Item[] {
+    return [].concat(
+        content.cave, content.miniQuest, content.quest, content.bossAltar,
+        content.dungeon, content.raid, content.lootrunCamp
+    )
 }
 
-async function wdload_caves() {
-    let caves: JSONFormat_WynntilsCave[] = await (() => {
+/**
+ * Loads content from the Wynntils and Wynndex APIs, returning an object
+ * where 
+ * 
+ * @returns         Dict containing content book items
+ */
+async function wdload_content(): Promise<Dict<JSON_Content_Item>> {
+    // Get Wynntils data
+    let content: JSON_Wynntils_Content_Book = await (() => {
         return new Promise((resolve) => {
-            fetch("https://raw.githubusercontent.com/Wynntils/Reference/main/content/cave.json")
+            fetch(WYNNTILS_API_CONTENT_BOOK)
                 .then(res => res.json())
                 .then(out => resolve(out))
                 .catch(err => {throw err});
         })
     })();
-    return caves;
-}
 
-async function wdload_content() {
-    let caves: JSONFormat_Content = await (() => {
+    // Get Wynndex patches
+    let content_patch: JSON_Content_Item[] = await (() => {
         return new Promise((resolve) => {
-            fetch("https://raw.githubusercontent.com/Wynntils/Static-Storage/main/Data-Storage/raw/content/content_book_dump.json")
+            fetch(WYNNDEX_API_CONTENT_BOOK)
                 .then(res => res.json())
                 .then(out => resolve(out))
                 .catch(err => {throw err});
         })
     })();
-    return caves;
-}
 
-async function wdload_content_local() {
-    let caves: JSONFormat_Content = await (() => {
-        return new Promise((resolve) => {
-            fetch("https://raw.githubusercontent.com/wynndex/wynndex/api/content_book.json")
-                .then(res => res.json())
-                .then(out => resolve(out))
-                .catch(err => {throw err});
-        })
-    })();
-    return caves;
+    // Convert data to dict
+    let data: Dict<JSON_Content_Item> = {};
+    for (const item of flatten_content(content)) {
+        data[`${item.type}_${item.name}`] = item;
+    }
+
+    // Apply patches
+    for (const item of content_patch) {
+        for (const [key, value] of Object.entries(item)) {
+            if (key == "name" || key == "type") {
+                continue;
+            }
+
+            if ([null, undefined, ""].includes(data[`${item.type}_${item.name}`][key])) {
+                data[`${item.type}_${item.name}`][key] = value;
+            }
+        }
+    }
+
+    // Remove color codes from descriptions
+    for (const item of Object.values(data)) {
+        let color_format_index: number;
+        while ((color_format_index = item.description.indexOf('\u00a7')) != -1) {
+            item.description = item.description.slice(0, color_format_index) + item.description.slice(color_format_index + 2)
+        }
+    }
+
+    return data;
 }
 
 function build_poi(
-    item: JSONFormat_ContentItem,
+    item: JSON_Content_Item,
     image: HTMLImageElement,
     generator: (ui: UIPanel, opts: {[key: string]: any}) => void,
     canvas: AutoCanvas
