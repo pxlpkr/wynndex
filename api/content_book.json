@@ -1,13 +1,11 @@
-{
-    "quest": [
-        {
-            "type": "quest",
-            "name": "The Shadow of the Beast",
-            "location": {
-                "x": -1483,
-                "y": 47,
-                "z": -5218
-            }
+[
+    {
+        "type": "quest",
+        "name": "The Shadow of the Beast",
+        "location": {
+            "x": -1483,
+            "y": 47,
+            "z": -5218
         }
-    ]
-}
+    }
+]
