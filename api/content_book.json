@@ -33,15 +33,6 @@
         }
     },
     {
-        "type": "quest",
-        "name": "The Shadow of the Beast",
-        "location": {
-            "x": -1483,
-            "y": 47,
-            "z": -5218
-        }
-    },
-    {
         "type": "storylineQuest",
         "name": "A Journey Beyond",
         "location": {
@@ -498,6 +489,483 @@
             "x": -1802,
             "y": 55,
             "z": -5190
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Meaningful Holiday",
+        "location": {
+            "x": 929,
+            "y": 75,
+            "z": -1899
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Memory Paranoia",
+        "location": {
+            "x": -1192,
+            "y": 46,
+            "z": -5198
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Mixed Feelings",
+        "location": {
+            "x": -1413,
+            "y": 46,
+            "z": -2920
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Murder Mystery",
+        "location": {
+            "x": -590,
+            "y": 0,
+            "z": -4956
+        }
+    },
+    {
+        "type": "storylineQuest",
+        "name": "Mushroom Man",
+        "location": {
+            "x": -158,
+            "y": 73,
+            "z": -1621
+        }
+    },
+    {
+        "type": "quest",
+        "name": "One Thousand Meters Under",
+        "location": {
+            "x": 1108,
+            "y": 107,
+            "z": -4555
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Out of my Mind",
+        "location": {
+            "x": -860,
+            "y": 93,
+            "z": -963
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Pirate\u0027s Trove",
+        "location": {
+            "x": -1937,
+            "y": 38,
+            "z": -4260
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Pit of the Dead",
+        "location": {
+            "x": 210,
+            "y": 37,
+            "z": -2150
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Point of No Return",
+        "location": {
+            "x": 1014,
+            "y": 77,
+            "z": -675
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Poisoning the Pest",
+        "location": {
+            "x": -749,
+            "y": 67,
+            "z": -1664
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Potion Making",
+        "location": {
+            "x": 491,
+            "y": 67,
+            "z": -1575
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Purple and Blue",
+        "location": {
+            "x": -236,
+            "y": 34,
+            "z": -5224
+        }
+    },
+    {
+        "type": "storylineQuest",
+        "name": "Realm of Light I - The Worm Holes",
+        "location": {
+            "x": -2039,
+            "y": 55,
+            "z": -5434
+        }
+    },
+    {
+        "type": "storylineQuest",
+        "name": "Realm of Light II - Taproot",
+        "location": {
+            "x": -1257,
+            "y": 43,
+            "z": -5474
+        }
+    },
+    {
+        "type": "storylineQuest",
+        "name": "Realm of Light III - A Headless History",
+        "location": {
+            "x": -1096,
+            "y": 42,
+            "z": -5384
+        }
+    },
+    {
+        "type": "storylineQuest",
+        "name": "Realm of Light IV - Finding the Light",
+        "location": {
+            "x": -1123,
+            "y": 46,
+            "z": -4771
+        }
+    },
+    {
+        "type": "storylineQuest",
+        "name": "Realm of Light V - The Realm of Light",
+        "location": {
+            "x": -1053,
+            "y": 46,
+            "z": -4363
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Redbeard\u0027s Booty",
+        "location": {
+            "x": -608,
+            "y": 40,
+            "z": -3546
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Reincarnation",
+        "location": {
+            "x": 372,
+            "y": 0,
+            "z": -774
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Rise of the Quartron",
+        "location": {
+            "x": -1663,
+            "y": 46,
+            "z": -4376
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Stable Story",
+        "location": {
+            "x": 561,
+            "y": 67,
+            "z": -1598
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Star Thief",
+        "location": {
+            "x": -2018,
+            "y": 43,
+            "z": -4822
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Supply and Delivery",
+        "location": {
+            "x": 492,
+            "y": 67,
+            "z": -1588
+        }
+    },
+    {
+        "type": "storylineQuest",
+        "name": "Taking the Tower",
+        "location": {
+            "x": 511,
+            "y": 67,
+            "z": -1613
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Temple of the Legends",
+        "location": {
+            "x": -693,
+            "y": 68,
+            "z": -993
+        }
+    },
+    {
+        "type": "quest",
+        "name": "The Bigger Picture",
+        "location": {
+            "x": -209,
+            "y": 37,
+            "z": -4534
+        }
+    },
+    {
+        "type": "storylineQuest",
+        "name": "The Breaking Point",
+        "location": {
+            "x": 758,
+            "y": 164,
+            "z": -4463
+        }
+    },
+    {
+        "type": "quest",
+        "name": "The Corrupted Village",
+        "location": {
+            "x": 318,
+            "y": 78,
+            "z": -1097
+        }
+    },
+    {
+        "type": "quest",
+        "name": "The Dark Descent",
+        "location": {
+            "x": 227,
+            "y": 45,
+            "z": -1958
+        }
+    },
+    {
+        "type": "storylineQuest",
+        "name": "The Envoy Part I",
+        "location": {
+            "x": 112,
+            "y": 66,
+            "z": -3173
+        }
+    },
+    {
+        "type": "storylineQuest",
+        "name": "The Envoy Part II",
+        "location": {
+            "x": -1572,
+            "y": 0,
+            "z": -2876
+        }
+    },
+    {
+        "type": "storylineQuest",
+        "name": "The Feathers Fly Part II",
+        "location": {
+            "x": -1573,
+            "y": 86,
+            "z": -2762
+        }
+    },
+    {
+        "type": "quest",
+        "name": "The House of Twain",
+        "location": {
+            "x": 12,
+            "y": 76,
+            "z": -456
+        }
+    },
+    {
+        "type": "quest",
+        "name": "The Maiden Tower",
+        "location": {
+            "x": -2172,
+            "y": 54,
+            "z": -5118
+        }
+    },
+    {
+        "type": "quest",
+        "name": "The Mercenary",
+        "location": {
+            "x": 184,
+            "y": 54,
+            "z": -2141
+        }
+    },
+    {
+        "type": "quest",
+        "name": "The Olmic Rune",
+        "location": {
+            "x": 585,
+            "y": 89,
+            "z": -457
+        }
+    },
+    {
+        "type": "quest",
+        "name": "The Passage",
+        "location": {
+            "x": -820,
+            "y": 94,
+            "z": -1040
+        }
+    },
+    {
+        "type": "quest",
+        "name": "The Qira Hive",
+        "location": {
+            "x": 372,
+            "y": 64,
+            "z": -5500
+        }
+    },
+    {
+        "type": "quest",
+        "name": "The Sewers of Ragni",
+        "location": {
+            "x": -890,
+            "y": 60,
+            "z": -1874
+        }
+    },
+    {
+        "type": "quest",
+        "name": "The Shadow of the Beast",
+        "location": {
+            "x": -1483,
+            "y": 47,
+            "z": -5218
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Tower of Ascension",
+        "location": {
+            "x": -350,
+            "y": 0,
+            "z": -389
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Tribal Aggression",
+        "location": {
+            "x": 1077,
+            "y": 84,
+            "z": -1613
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Troubled Tribesmen",
+        "location": {
+            "x": -545,
+            "y": 52,
+            "z": -313
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Tunnel Trouble",
+        "location": {
+            "x": 379,
+            "y": 67,
+            "z": -1569
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Underice",
+        "location": {
+            "x": 157,
+            "y": 73,
+            "z": -812
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Underwater",
+        "location": {
+            "x": -540,
+            "y": 34,
+            "z": -2020
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Wrath of the Mummy",
+        "location": {
+            "x": 979,
+            "y": 69,
+            "z": -1808
+        }
+    },
+    {
+        "type": "storylineQuest",
+        "name": "WynnExcavation Site A",
+        "location": {
+            "x": 1150,
+            "y": 54,
+            "z": -1770
+        }
+    },
+    {
+        "type": "storylineQuest",
+        "name": "WynnExcavation Site B",
+        "location": {
+            "x": 39,
+            "y": 62,
+            "z": -526
+        }
+    },
+    {
+        "type": "storylineQuest",
+        "name": "WynnExcavation Site C",
+        "location": {
+            "x": -1061,
+            "y": 42,
+            "z": -3742
+        }
+    },
+    {
+        "type": "storylineQuest",
+        "name": "WynnExcavation Site D",
+        "location": {
+            "x": -848,
+            "y": 98,
+            "z": -789
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Zhight Island",
+        "location": {
+            "x": -542,
+            "y": 38,
+            "z": -2755
         }
     }
 ]
