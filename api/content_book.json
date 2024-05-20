@@ -202,5 +202,302 @@
             "y": 59,
             "z": -5427
         }
+    },
+    {
+        "type": "quest",
+        "name": "Deja Vu",
+        "location": {
+            "x": -449,
+            "y": 72,
+            "z": -1153
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Desperate Metal",
+        "location": {
+            "x": -1672,
+            "y": 38,
+            "z": -2083
+        }
+    },
+    {
+        "type": "storylineQuest",
+        "name": "Dwarves and Doguns Part I",
+        "location": {
+            "x": 1024,
+            "y": 17,
+            "z": -5143
+        }
+    },
+    {
+        "type": "storylineQuest",
+        "name": "Dwarves and Doguns Part II",
+        "location": {
+            "x": 1371,
+            "y": 141,
+            "z": -5306
+        }
+    },
+    {
+        "type": "storylineQuest",
+        "name": "Dwarves and Doguns Part III",
+        "location": {
+            "x": 1436,
+            "y": 134,
+            "z": -5388
+        }
+    },
+    {
+        "type": "storylineQuest",
+        "name": "Dwarves and Doguns Part IV",
+        "location": {
+            "x": 1514,
+            "y": 51,
+            "z": -5342
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Dwelling Walls",
+        "location": {
+            "x": 201,
+            "y": 38,
+            "z": -2173
+        }
+    },
+    {
+        "type": "storylineQuest",
+        "name": "Elemental Exercise",
+        "location": {
+            "x": 518,
+            "y": 67,
+            "z": -1631
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Enter the Dojo",
+        "location": {
+            "x": 495,
+            "y": 109,
+            "z": -5571
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Enzan\u0027s Brother",
+        "location": {
+            "x": -772,
+            "y": 67,
+            "z": -1572
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Fallen Delivery",
+        "location": {
+            "x": 65,
+            "y": 0,
+            "z": -4844
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Fantastic Voyage",
+        "location": {
+            "x": 1304,
+            "y": 35,
+            "z": -4043
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Fate of the Fallen",
+        "location": {
+            "x": 165,
+            "y": 74,
+            "z": -675
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Flight in Distress",
+        "location": {
+            "x": -172,
+            "y": 108,
+            "z": -4946
+        }
+    },
+    {
+        "type": "quest",
+        "name": "From the Bottom",
+        "location": {
+            "x": 191,
+            "y": 6,
+            "z": -5236
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Frost Bite",
+        "location": {
+            "x": -207,
+            "y": 37,
+            "z": -531
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Grand Youth",
+        "location": {
+            "x": -550,
+            "y": 61,
+            "z": -747
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Grave Digger",
+        "location": {
+            "x": 476,
+            "y": 69,
+            "z": -1624
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Green Gloop",
+        "location": {
+            "x": 1172,
+            "y": 77,
+            "z": -2027
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Haven Antiquity",
+        "location": {
+            "x": 770,
+            "y": 36,
+            "z": -3880
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Heart of Llevigar",
+        "location": {
+            "x": -1872,
+            "y": 55,
+            "z": -4593
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Hunger of the Gerts Part II",
+        "location": {
+            "x": -33,
+            "y": 34,
+            "z": -5502
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Ice Nations",
+        "location": {
+            "x": 806,
+            "y": 59,
+            "z": -3353
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Jungle Fever",
+        "location": {
+            "x": -760,
+            "y": 79,
+            "z": -666
+        }
+    },
+    {
+        "type": "storylineQuest",
+        "name": "King\u0027s Recruit",
+        "location": {
+            "x": -1574,
+            "y": 51,
+            "z": -1625
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Kingdom of Sand",
+        "location": {
+            "x": 1408,
+            "y": 94,
+            "z": -1830
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Lava Springs",
+        "location": {
+            "x": 670,
+            "y": 80,
+            "z": -1755
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Lost Royalty",
+        "location": {
+            "x": -848,
+            "y": 85,
+            "z": -875
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Lost Soles",
+        "location": {
+            "x": -915,
+            "y": 33,
+            "z": -750
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Lost Tower",
+        "location": {
+            "x": 24,
+            "y": 0,
+            "z": -2197
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Lost in the Jungle",
+        "location": {
+            "x": -753,
+            "y": 79,
+            "z": -663
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Maltic\u0027s Well",
+        "location": {
+            "x": -568,
+            "y": 48,
+            "z": -1922
+        }
+    },
+    {
+        "type": "quest",
+        "name": "Master Piece",
+        "location": {
+            "x": -1802,
+            "y": 55,
+            "z": -5190
+        }
     }
 ]
