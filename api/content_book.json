@@ -968,15 +968,17 @@
             "z": -2755
         }
     },
+
     {
         "type": "miniQuest",
         "name": "Slay Creatures of the Void",
         "location": {
             "x": 2316,
             "y": 118,
-            "z": -6894
+            "z": -5106
         }
     },
+
     {
         "type": "dungeon",
         "name": "Corrupted Decrepit Sewers",
