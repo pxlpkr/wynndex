@@ -19,6 +19,16 @@ const generate_ui_cave = (ui: UIPanel, data: JSON_Content_Item) => {
     );
 };
 
+const generate_ui_bossaltar = (ui: UIPanel, data: JSON_Content_Item) => {
+    ui.getContent().appendChild(
+        fast("div", {className: "ui-container ui-padded", children: [
+            fast("label", {innerText: data.name, className: "ui-label center-text ui-title"}),
+            fast("label", {innerText: `Level ${data.requirements.level} Boss Altar`, className: "ui-label center-text broad-text ui-subtitle"}),
+            fast("hr", {className: "ui-separator"})
+        ]})
+    );
+};
+
 const generate_ui_quest = (ui: UIPanel, data: JSON_Content_Item) => {
     let container = fast("div", {className: "ui-container ui-padded", children: [
         fast("label", {innerText: data.name, className: "ui-label center-text ui-title"}),

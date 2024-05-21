@@ -55,7 +55,7 @@ async function wdload_content(): Promise<Dict<JSON_Content_Item>> {
                 continue;
             }
 
-            if ([null, undefined, ""].includes(data[`${item.type}_${item.name}`][key])) {
+            if ([null, undefined, ""].includes(data[`${item.type}_${item.name}`][key]) || data[`${item.type}_${item.name}`][key].length == 0) {
                 data[`${item.type}_${item.name}`][key] = value;
             }
         }

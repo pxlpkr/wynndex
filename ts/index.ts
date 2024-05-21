@@ -68,8 +68,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     let frame_quest_a: HTMLImageElement = wrap(new Image()).set("src", "rsc/frame_quest_a.png").unwrap();
     let frame_raid_a: HTMLImageElement = wrap(new Image()).set("src", "rsc/frame_raid_a.png").unwrap();
     let frame_story_a: HTMLImageElement = wrap(new Image()).set("src", "rsc/frame_story_a.png").unwrap();
-    const empty: JSON_Content_Item[] = [];
-    for (const [key, item] of Object.entries(content)) {
+    for (const [_, item] of Object.entries(content)) {
         if (!item.location) {
             continue;
         }
@@ -90,7 +89,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             case "cave":            return generate_ui_cave;
             case "dungeon":         return generate_ui_dungeon;
 
-            case "bossAltar":       return generate_ui_cave;
+            case "bossAltar":       return generate_ui_bossaltar;
             case "lootrunCamp":     return generate_ui_cave;
             case "raid":            return generate_ui_cave;
         }})(), canvas);

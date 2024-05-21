@@ -2,10 +2,11 @@
     "compileOnSave": true,
     "compilerOptions": {
         "target": "es2021",
-        "outDir": "js",
+        "outFile": "./js/wynndex.js",
         "removeComments": true
     },
     "include": [
-        "ts/*.ts"
+        "ts/**/*.ts",
+        "lib/**/*.ts"
     ]
 }
