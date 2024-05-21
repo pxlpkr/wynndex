@@ -978,7 +978,268 @@
             "z": -5106
         }
     },
+    {
+        "type": "miniQuest",
+        "name": "Gather Acacia Logs",
+        "location": {
+            "x": 630,
+            "y": 64,
+            "z": -1978
+        }
+    },
+    {
+        "type": "miniQuest",
+        "name": "Gather Acacia Logs II",
+        "location": {
+            "x": 1226,
+            "y": 116,
+            "z": -1391
+        }
+    },
+    {
+        "type": "miniQuest",
+        "name": "Gather Avo Logs",
+        "location": {
+            "x": -1710,
+            "y": 67,
+            "z": -2802
+        }
+    },
+    {
+        "type": "miniQuest",
+        "name": "Gather Avo Logs II",
+        "location": {
+            "x": -1836,
+            "y": 105,
+            "z": -2906
+        }
+    },
+    {
+        "type": "miniQuest",
+        "name": "Gather Avo Logs III",
+        "location": {
+            "x": -1739,
+            "y": 76,
+            "z": -2469
+        }
+    },
+    {
+        "type": "miniQuest",
+        "name": "Gather Avo Logs IV",
+        "location": {
+            "x": -1686,
+            "y": 75,
+            "z": -2187
+        }
+    },
+    {
+        "type": "miniQuest",
+        "name": "Gather Bamboo",
+        "location": {
+            "x": 87,
+            "y": 81,
+            "z": -4340
+        }
+    },
+    {
+        "type": "miniQuest",
+        "name": "Gather Bass",
+        "location": {
+            "x": 105,
+            "y": 45,
+            "z": -4987
+        }
+    },
+    {
+        "type": "miniQuest",
+        "name": "Gather Bass II",
+        "location": {
+            "x": -1729,
+            "y": 37,
+            "z": -2067
+        }
+    },
+    {
+        "type": "miniQuest",
+        "name": "Gather Bass III",
+        "location": {
+            "x": -1829,
+            "y": 37,
+            "z": -2223
+        }
+    },
+    {
+        "type": "miniQuest",
+        "name": "Gather Bass IV",
+        "location": {
+            "x": -1330,
+            "y": 34,
+            "z": -2732
+        }
+    },
+    {
+        "type": "miniQuest",
+        "name": "Gather Carp",
+        "location": {
+            "x": 1317,
+            "y": 74,
+            "z": -1838
+        }
+    },
+    {
+        "type": "miniQuest",
+        "name": "Gather Carp II",
+        "location": {
+            "x": 1070,
+            "y": 30,
+            "z": -1423
+        }
+    },
+    {
+        "type": "miniQuest",
+        "name": "Gather Cobalt",
+        "location": {
+            "x": -896,
+            "y": 24,
+            "z": -679
+        }
+    },
+    {
+        "type": "miniQuest",
+        "name": "Gather Cobalt II",
+        "location": {
+            "x": -1277,
+            "y": 25,
+            "z": -5528
+        }
+    },
+    {
+        "type": "miniQuest",
+        "name": "Gather Cobalt III",
+        "location": {
+            "x": 190,
+            "y": 62,
+            "z": -3986
+        }
+    },
+    {
+        "type": "miniQuest",
+        "name": "Gather Dark Logs",
+        "location": {
+            "x": -1253,
+            "y": 42,
+            "z": -5385
+        }
+    },
+    {
+        "type": "miniQuest",
+        "name": "Gather Dark Logs II",
+        "location": {
+            "x": -1066,
+            "y": 43,
+            "z": -5156
+        }
+    },
+    {
+        "type": "miniQuest",
+        "name": "Gather Dark Logs III",
+        "location": {
+            "x": 952,
+            "y": 47,
+            "z": -3883
+        }
+    },
+    {
+        "type": "miniQuest",
+        "name": "Gather Decay Roots",
+        "location": {
+            "x": -950,
+            "y": 47,
+            "z": -5291
+        }
+    },
+    {
+        "type": "miniQuest",
+        "name": "Gather Decay Roots II",
+        "location": {
+            "x": -623,
+            "y": 42,
+            "z": -5124
+        }
+    },
+    {
+        "type": "miniQuest",
+        "name": "Gather Decay Roots III",
+        "location": {
+            "x": -725,
+            "y": 44,
+            "z": -5009
+        }
+    },
+    {
+        "type": "miniQuest",
+        "name": "Gather Diamonds",
+        "location": {
+            "x": 337,
+            "y": 27,
+            "z": -5356
+        }
+    },
+    {
+        "type": "miniQuest",
+        "name": "Gather Diamonds II",
+        "location": {
+            "x": 641,
+            "y": 29,
+            "z": -4793
+        }
+    },
+    {
+        "type": "miniQuest",
+        "name": "Gather Diamonds III",
+        "location": {
+            "x": 27,
+            "y": 42,
+            "z": -4672
+        }
+    },
+    {
+        "type": "miniQuest",
+        "name": "Gather Diamonds IV",
+        "location": {
+            "x": 369,
+            "y": 77,
+            "z": -5070
+        }
+    },
+    {
+        "type": "miniQuest",
+        "name": "Gather Gold",
+        "location": {
+            "x": 424,
+            "y": 66,
+            "z": -1275
+        }
+    },
+    {
+        "type": "miniQuest",
+        "name": "Gather Gold II",
+        "location": {
+            "x": 833,
+            "y": 38,
+            "z": -1282
+        }
+    },
 
+    {
+        "type": "dungeon",
+        "name": "Galleon\u0027s Graveyard",
+        "location": {
+            "x": -583,
+            "y": 0,
+            "z": -3468
+        }
+    },
     {
         "type": "dungeon",
         "name": "Corrupted Decrepit Sewers",
@@ -1049,6 +1310,16 @@
             "x": -815,
             "y": 0,
             "z": -4915
+        }
+    },
+
+    {
+        "type": "secretDiscovery",
+        "name": "A Deathly Warning",
+        "location": {
+            "x": -250,
+            "y": 0,
+            "z": -359
         }
     }
 ]

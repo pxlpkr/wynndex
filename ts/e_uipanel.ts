@@ -19,11 +19,11 @@ const parse_rewards_requirements = (data: JSON_Content_Item) => {
         for (const reward of data.rewards) {
             l.appendChild(fast("br"));
             let s = reward.split(' ');
-            if (["Fishing", "Farming", "Woodcutting", "Mining"].includes(s[1])) {
+            if (s.length > 1 && ["Fishing", "Farming", "Woodcutting", "Mining"].includes(s[1])) {
                 l.appendChild(fast("img", {src: `rsc/prof_${s[1].toLowerCase()}_xp.png`, className: "tiny-icon"}));
-            } else if (s[1] == "XP" || s[1] == "Combat") {
+            } else if (s.length > 1 && s[1] == "XP" || s[1] == "Combat") {
                 l.appendChild(fast("img", {src: `rsc/xp.png`, className: "tiny-icon"}));
-            } else if (s[1] == "Emeralds") {
+            } else if (s.length > 1 && s[1] == "Emeralds") {
                 let count = parseInt(s[0]);
                 if (count < 64 * 8) {
                     l.appendChild(fast("img", {src: `rsc/emerald.png`, className: "tiny-icon"}));
@@ -32,6 +32,10 @@ const parse_rewards_requirements = (data: JSON_Content_Item) => {
                 } else {
                     l.appendChild(fast("img", {src: `rsc/emerald_liquid.png`, className: "tiny-icon"}));
                 }
+            } else if (s.length > 0 && s[s.length - 1] == "Key") {
+                l.appendChild(fast("img", {src: `rsc/key.png`, className: "tiny-icon"}));
+            } else if (s.length > 0 && s[0] == "Access") {
+                l.appendChild(fast("img", {src: `rsc/unlocked.png`, className: "tiny-icon"}));
             } else {
                 l.appendChild(fast("img", {src: `rsc/empty.png`, className: "tiny-icon"}));
             }
@@ -45,7 +49,7 @@ const parse_rewards_requirements = (data: JSON_Content_Item) => {
 
 const opt_filters = [
     ["Quests", "quest", "rsc/frame_quest_a.png", "rsc/frame_quest.png"],
-    ["Mini-Quests", "miniQuest", "rsc/frame_miniquest_a.png", "rsc/frame_miniquest.png"],
+    ["Mini Quests", "miniQuest", "rsc/frame_miniquest_a.png", "rsc/frame_miniquest.png"],
     ["Caves", "cave", "rsc/frame_cave_a.png", "rsc/frame_cave.png"],
     ["Dungeons", "dungeon", "rsc/frame_dungeon_a.png", "rsc/frame_dungeon.png"],
     ["Raids", "raid", "rsc/frame_raid_a.png", "rsc/frame_raid.png"],
@@ -63,9 +67,10 @@ const generate_ui_opt_filter = (ui: UIPanel, _: null) => {
 
     for (const item of opt_filters) {
         let outer = fast("div", {className: "ui-subdiv"});
-        let img_button = fast("img", {className: "filter-img", src: (options.view[item[1]]? item[2] : item[3])});
-        let img_label = fast("label", {innerText: item[0], className: "ui-label ui-subtitle"});
-        img_button.addEventListener("click", () => {
+        let img_button = fast("img", {draggable: "false", className: "filter-img", src: (options.view[item[1]]? item[2] : item[3])});
+        let img_label = fast("label", {innerText: item[0], className: "ui-label opt_item"});
+        let press_callback = () => {
+            console.log("hey");
             if (options.view[item[1]]) {
                 img_button.src = item[3];
             } else {
@@ -73,7 +78,8 @@ const generate_ui_opt_filter = (ui: UIPanel, _: null) => {
             }
             options.view[item[1]] = !options.view[item[1]];
             updateVisibility();
-        });
+        };
+        img_button.addEventListener("click", press_callback);
         outer.appendChild(img_button);
         outer.appendChild(img_label);
         item_1.appendChild(outer);

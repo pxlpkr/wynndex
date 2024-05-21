@@ -136,6 +136,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                 case "bossAltar":       return frame_boss_a;
                 case "lootrunCamp":     return frame_lootrun_a;
                 case "raid":            return frame_raid_a;
+                case "secretDiscovery": return frame_discovery_a;
+                case "worldDiscovery":  return frame_discovery_a;
+                case "territorialDiscovery": return frame_discovery_a;
             }})())
             .set('render_ignore_scaling', true)
             .set('render_centered', true)
@@ -185,10 +188,14 @@ document.addEventListener("DOMContentLoaded", async () => {
                                 case "bossAltar":       return generate_ui_bossaltar;
                                 case "lootrunCamp":     return generate_ui_cave;
                                 case "raid":            return generate_ui_cave;
+
+                                case "secretDiscovery": return generate_ui_cave;
+                                case "worldDiscovery":  return generate_ui_cave;
+                                case "territorialDiscovery": return generate_ui_cave;
                             }})(),
                             'data': item
                         },
-                        at: [0, 0]
+                        at: [-1000, -1000]
                     });
                     panelComponent.refresh = ((ctx: CanvasRenderingContext2D, transform: ACC_TransformState) => {
                         if (panelComponent.obj.panel.classList.contains('is-fading-out')) {

@@ -116,7 +116,8 @@ body {
 
 .ui-subdiv {
     width: 100%;
-    display: flex;
+    display: inline-flex;
+    vertical-align: center;
 }
 
 .ui-container {

@@ -11,7 +11,8 @@ const WYNNDEX_API_CONTENT_BOOK = "https://wynndex.github.io/api/content_book.jso
 function flatten_content(content: JSON_Wynntils_Content_Book): JSON_Content_Item[] {
     return [].concat(
         content.cave, content.miniQuest, content.quest, content.bossAltar,
-        content.dungeon, content.raid, content.lootrunCamp
+        content.dungeon, content.raid, content.lootrunCamp, content.secretDiscovery,
+        content.territorialDiscovery, content.worldDiscovery
     )
 }
 
@@ -69,6 +70,13 @@ async function wdload_content(): Promise<Dict<JSON_Content_Item>> {
             while ((color_format_index = item.requirements.quests[i].indexOf('\u058E')) != -1) {
                 item.requirements.quests[i] = item.requirements.quests[i].slice(0, color_format_index) + item.requirements.quests[i].slice(color_format_index + 2)
             }
+        }
+    }
+
+    // Check location data
+    for (const item of Object.values(data)) {
+        if (item.location == null) {
+            console.log(item.name);
         }
     }
 

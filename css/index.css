@@ -63,4 +63,11 @@
 .filter-img {
     padding-right: 8px;
     cursor: pointer;
+    image-rendering: pixelated;
+    height: 28px;
+}
+
+.opt_item {
+    font-size: 28px !important;
+    user-select: none;
 }

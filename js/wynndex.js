@@ -19,13 +19,13 @@ const parse_rewards_requirements = (data) => {
         for (const reward of data.rewards) {
             l.appendChild(fast("br"));
             let s = reward.split(' ');
-            if (["Fishing", "Farming", "Woodcutting", "Mining"].includes(s[1])) {
+            if (s.length > 1 && ["Fishing", "Farming", "Woodcutting", "Mining"].includes(s[1])) {
                 l.appendChild(fast("img", { src: `rsc/prof_${s[1].toLowerCase()}_xp.png`, className: "tiny-icon" }));
             }
-            else if (s[1] == "XP" || s[1] == "Combat") {
+            else if (s.length > 1 && s[1] == "XP" || s[1] == "Combat") {
                 l.appendChild(fast("img", { src: `rsc/xp.png`, className: "tiny-icon" }));
             }
-            else if (s[1] == "Emeralds") {
+            else if (s.length > 1 && s[1] == "Emeralds") {
                 let count = parseInt(s[0]);
                 if (count < 64 * 8) {
                     l.appendChild(fast("img", { src: `rsc/emerald.png`, className: "tiny-icon" }));
@@ -36,6 +36,12 @@ const parse_rewards_requirements = (data) => {
                 else {
                     l.appendChild(fast("img", { src: `rsc/emerald_liquid.png`, className: "tiny-icon" }));
                 }
+            }
+            else if (s.length > 0 && s[s.length - 1] == "Key") {
+                l.appendChild(fast("img", { src: `rsc/key.png`, className: "tiny-icon" }));
+            }
+            else if (s.length > 0 && s[0] == "Access") {
+                l.appendChild(fast("img", { src: `rsc/unlocked.png`, className: "tiny-icon" }));
             }
             else {
                 l.appendChild(fast("img", { src: `rsc/empty.png`, className: "tiny-icon" }));
@@ -48,7 +54,7 @@ const parse_rewards_requirements = (data) => {
 };
 const opt_filters = [
     ["Quests", "quest", "rsc/frame_quest_a.png", "rsc/frame_quest.png"],
-    ["Mini-Quests", "miniQuest", "rsc/frame_miniquest_a.png", "rsc/frame_miniquest.png"],
+    ["Mini Quests", "miniQuest", "rsc/frame_miniquest_a.png", "rsc/frame_miniquest.png"],
     ["Caves", "cave", "rsc/frame_cave_a.png", "rsc/frame_cave.png"],
     ["Dungeons", "dungeon", "rsc/frame_dungeon_a.png", "rsc/frame_dungeon.png"],
     ["Raids", "raid", "rsc/frame_raid_a.png", "rsc/frame_raid.png"],
@@ -64,9 +70,10 @@ const generate_ui_opt_filter = (ui, _) => {
     item_1.appendChild(fast("label", { innerText: "Filters", className: "ui-label center-text ui-title" }));
     for (const item of opt_filters) {
         let outer = fast("div", { className: "ui-subdiv" });
-        let img_button = fast("img", { className: "filter-img", src: (options.view[item[1]] ? item[2] : item[3]) });
-        let img_label = fast("label", { innerText: item[0], className: "ui-label ui-subtitle" });
-        img_button.addEventListener("click", () => {
+        let img_button = fast("img", { draggable: "false", className: "filter-img", src: (options.view[item[1]] ? item[2] : item[3]) });
+        let img_label = fast("label", { innerText: item[0], className: "ui-label opt_item" });
+        let press_callback = () => {
+            console.log("hey");
             if (options.view[item[1]]) {
                 img_button.src = item[3];
             }
@@ -75,7 +82,8 @@ const generate_ui_opt_filter = (ui, _) => {
             }
             options.view[item[1]] = !options.view[item[1]];
             updateVisibility();
-        });
+        };
+        img_button.addEventListener("click", press_callback);
         outer.appendChild(img_button);
         outer.appendChild(img_label);
         item_1.appendChild(outer);
@@ -265,6 +273,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                 case "bossAltar": return frame_boss_a;
                 case "lootrunCamp": return frame_lootrun_a;
                 case "raid": return frame_raid_a;
+                case "secretDiscovery": return frame_discovery_a;
+                case "worldDiscovery": return frame_discovery_a;
+                case "territorialDiscovery": return frame_discovery_a;
             }
         })())
             .set('render_ignore_scaling', true)
@@ -317,11 +328,14 @@ document.addEventListener("DOMContentLoaded", async () => {
                                 case "bossAltar": return generate_ui_bossaltar;
                                 case "lootrunCamp": return generate_ui_cave;
                                 case "raid": return generate_ui_cave;
+                                case "secretDiscovery": return generate_ui_cave;
+                                case "worldDiscovery": return generate_ui_cave;
+                                case "territorialDiscovery": return generate_ui_cave;
                             }
                         })(),
                         'data': item
                     },
-                    at: [0, 0]
+                    at: [-1000, -1000]
                 });
                 panelComponent.refresh = ((ctx, transform) => {
                     if (panelComponent.obj.panel.classList.contains('is-fading-out')) {
@@ -347,7 +361,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 const WYNNTILS_API_CONTENT_BOOK = "https://raw.githubusercontent.com/Wynntils/Static-Storage/main/Data-Storage/raw/content/content_book_dump.json";
 const WYNNDEX_API_CONTENT_BOOK = "https://wynndex.github.io/api/content_book.json";
 function flatten_content(content) {
-    return [].concat(content.cave, content.miniQuest, content.quest, content.bossAltar, content.dungeon, content.raid, content.lootrunCamp);
+    return [].concat(content.cave, content.miniQuest, content.quest, content.bossAltar, content.dungeon, content.raid, content.lootrunCamp, content.secretDiscovery, content.territorialDiscovery, content.worldDiscovery);
 }
 async function wdload_content() {
     let content = await (() => {
@@ -387,6 +401,11 @@ async function wdload_content() {
             while ((color_format_index = item.requirements.quests[i].indexOf('\u058E')) != -1) {
                 item.requirements.quests[i] = item.requirements.quests[i].slice(0, color_format_index) + item.requirements.quests[i].slice(color_format_index + 2);
             }
+        }
+    }
+    for (const item of Object.values(data)) {
+        if (item.location == null) {
+            console.log(item.name);
         }
     }
     return data;
@@ -842,10 +861,6 @@ class UIPanel {
             this.bar.appendChild(this.nav_right);
             this.nav_right.addEventListener('click', this.navigateRight.bind(this));
         }
-        this.panel.addEventListener('mousedown', (e) => {
-            this.panel.classList.remove('initial-fade');
-            this.panel.parentNode.appendChild(this.panel);
-        });
         if (args.allow_dragging) {
             this.bar.addEventListener('mousedown', (e) => {
                 let x = e.clientX, y = e.clientY;

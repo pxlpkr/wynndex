@@ -10,9 +10,10 @@ type JSON_Content_Item = {
     "lengthInfo": string,
     "difficulty": string,
     "requirements": {
-      "level": number,
-      "professionLevels": {},
-      "quests": string[]
+        "level": number,
+        "professionLevels": {},
+        "quests": string[],
+        "other": []
     },
     "rewards": string[],
     "location": {
