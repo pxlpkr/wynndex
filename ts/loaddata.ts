@@ -1,5 +1,5 @@
 const WYNNTILS_API_CONTENT_BOOK = "https://raw.githubusercontent.com/Wynntils/Static-Storage/main/Data-Storage/raw/content/content_book_dump.json";
-const WYNNDEX_API_CONTENT_BOOK = "https://raw.githubusercontent.com/wynndex/wynndex/main/api/content_book.json";
+const WYNNDEX_API_CONTENT_BOOK = "https://wynndex.github.io/api/content_book.json";
 
 /**
  * Converts a JSON_Wynntils_Content_Book object obtained from Wynntils into
