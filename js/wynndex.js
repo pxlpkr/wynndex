@@ -121,6 +121,56 @@ const generate_ui_quest = (ui, data) => {
     container.appendChild(parse_rewards_requirements(data));
     ui.getContent().appendChild(container);
 };
+const generate_ui_secret_discovery = (ui, data) => {
+    let container = fast("div", { className: "ui-container ui-padded", children: [
+            fast("label", { innerText: data.name, className: "ui-label center-text ui-title" }),
+            fast("label", { innerText: `Level ${data.requirements.level} Secret Discovery`, className: "ui-label center-text broad-text ui-subtitle" }),
+            fast("hr", { className: "ui-separator" }),
+            fast("label", { innerText: `Region: ${data.specialInfo}`, className: "ui-label small-text" }),
+        ] });
+    container.appendChild(parse_rewards_requirements(data));
+    ui.getContent().appendChild(container);
+};
+const generate_ui_world_discovery = (ui, data) => {
+    let container = fast("div", { className: "ui-container ui-padded", children: [
+            fast("label", { innerText: data.name, className: "ui-label center-text ui-title" }),
+            fast("label", { innerText: `Level ${data.requirements.level} World Discovery`, className: "ui-label center-text broad-text ui-subtitle" }),
+            fast("hr", { className: "ui-separator" }),
+        ] });
+    container.appendChild(parse_rewards_requirements(data));
+    ui.getContent().appendChild(container);
+};
+const generate_ui_territorial_discovery = (ui, data) => {
+    let container = fast("div", { className: "ui-container ui-padded", children: [
+            fast("label", { innerText: data.name, className: "ui-label center-text ui-title" }),
+            fast("label", { innerText: `Level ${data.requirements.level} Territory`, className: "ui-label center-text broad-text ui-subtitle" }),
+            fast("hr", { className: "ui-separator" }),
+        ] });
+    container.appendChild(parse_rewards_requirements(data));
+    ui.getContent().appendChild(container);
+};
+const generate_ui_lootrun = (ui, data) => {
+    let container = fast("div", { className: "ui-container ui-padded", children: [
+            fast("label", { innerText: data.name, className: "ui-label center-text ui-title" }),
+            fast("label", { innerText: `Level ${data.requirements.level} Lootrun Camp`, className: "ui-label center-text broad-text ui-subtitle" }),
+            fast("hr", { className: "ui-separator" }),
+            fast("label", { innerText: `Length: ${data.length}`, className: "ui-label small-text" }),
+            fast("label", { innerText: `Difficulty: ${data.difficulty}`, className: "ui-label broad-text small-text" }),
+        ] });
+    container.appendChild(parse_rewards_requirements(data));
+    ui.getContent().appendChild(container);
+};
+const generate_ui_raid = (ui, data) => {
+    let container = fast("div", { className: "ui-container ui-padded", children: [
+            fast("label", { innerText: data.name, className: "ui-label center-text ui-title" }),
+            fast("label", { innerText: `Level ${data.requirements.level} Raid`, className: "ui-label center-text broad-text ui-subtitle" }),
+            fast("hr", { className: "ui-separator" }),
+            fast("label", { innerText: `Length: ${data.length}`, className: "ui-label small-text" }),
+            fast("label", { innerText: `Difficulty: ${data.difficulty}`, className: "ui-label broad-text small-text" }),
+        ] });
+    container.appendChild(parse_rewards_requirements(data));
+    ui.getContent().appendChild(container);
+};
 const generate_ui_miniquest = (ui, data) => {
     let container = fast("div", { className: "ui-container ui-padded", children: [
             fast("label", { innerText: data.name, className: "ui-label center-text ui-title" })
@@ -251,7 +301,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     let content = await wdload_content();
     let frame_boss_a = wrap(new Image()).set("src", "rsc/frame_boss_a.png").unwrap();
     let frame_cave_a = wrap(new Image()).set("src", "rsc/frame_cave_a.png").unwrap();
-    let frame_discovery_a = wrap(new Image()).set("src", "rsc/frame_miniquest_a.png").unwrap();
+    let frame_discovery_a = wrap(new Image()).set("src", "rsc/frame_discovery_a.png").unwrap();
     let frame_dungeon_a = wrap(new Image()).set("src", "rsc/frame_dungeon_a.png").unwrap();
     let frame_lootrun_a = wrap(new Image()).set("src", "rsc/frame_lootrun_a.png").unwrap();
     let frame_miniquest_a = wrap(new Image()).set("src", "rsc/frame_miniquest_a.png").unwrap();
@@ -326,11 +376,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                                 case "cave": return generate_ui_cave;
                                 case "dungeon": return generate_ui_dungeon;
                                 case "bossAltar": return generate_ui_bossaltar;
-                                case "lootrunCamp": return generate_ui_cave;
-                                case "raid": return generate_ui_cave;
-                                case "secretDiscovery": return generate_ui_cave;
-                                case "worldDiscovery": return generate_ui_cave;
-                                case "territorialDiscovery": return generate_ui_cave;
+                                case "lootrunCamp": return generate_ui_lootrun;
+                                case "raid": return generate_ui_raid;
+                                case "secretDiscovery": return generate_ui_secret_discovery;
+                                case "worldDiscovery": return generate_ui_world_discovery;
+                                case "territorialDiscovery": return generate_ui_territorial_discovery;
                             }
                         })(),
                         'data': item
@@ -355,6 +405,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
         })
             .unwrap();
+        if ('update_visibility' in component) {
+            component.update_visibility();
+        }
         canvas.addComponent(component);
     }
 });

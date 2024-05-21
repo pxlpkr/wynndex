@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     let content = await wdload_content();
     let frame_boss_a: HTMLImageElement = wrap(new Image()).set("src", "rsc/frame_boss_a.png").unwrap();
     let frame_cave_a: HTMLImageElement = wrap(new Image()).set("src", "rsc/frame_cave_a.png").unwrap();
-    let frame_discovery_a: HTMLImageElement = wrap(new Image()).set("src", "rsc/frame_miniquest_a.png").unwrap();
+    let frame_discovery_a: HTMLImageElement = wrap(new Image()).set("src", "rsc/frame_discovery_a.png").unwrap();
     let frame_dungeon_a: HTMLImageElement = wrap(new Image()).set("src", "rsc/frame_dungeon_a.png").unwrap();
     let frame_lootrun_a: HTMLImageElement = wrap(new Image()).set("src", "rsc/frame_lootrun_a.png").unwrap();
     let frame_miniquest_a: HTMLImageElement = wrap(new Image()).set("src", "rsc/frame_miniquest_a.png").unwrap();
@@ -186,12 +186,12 @@ document.addEventListener("DOMContentLoaded", async () => {
                                 case "dungeon":         return generate_ui_dungeon;
 
                                 case "bossAltar":       return generate_ui_bossaltar;
-                                case "lootrunCamp":     return generate_ui_cave;
-                                case "raid":            return generate_ui_cave;
+                                case "lootrunCamp":     return generate_ui_lootrun;
+                                case "raid":            return generate_ui_raid;
 
-                                case "secretDiscovery": return generate_ui_cave;
-                                case "worldDiscovery":  return generate_ui_cave;
-                                case "territorialDiscovery": return generate_ui_cave;
+                                case "secretDiscovery": return generate_ui_secret_discovery;
+                                case "worldDiscovery":  return generate_ui_world_discovery;
+                                case "territorialDiscovery": return generate_ui_territorial_discovery;
                             }})(),
                             'data': item
                         },
@@ -215,6 +215,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                 }
             })
             .unwrap();
+        if ('update_visibility' in component) {
+            (component.update_visibility as () => void)();
+        }
         canvas.addComponent(component);
     }
 });

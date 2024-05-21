@@ -122,6 +122,61 @@ const generate_ui_quest = (ui: UIPanel, data: JSON_Content_Item) => {
     ui.getContent().appendChild(container);
 };
 
+const generate_ui_secret_discovery = (ui: UIPanel, data: JSON_Content_Item) => {
+    let container = fast("div", {className: "ui-container ui-padded", children: [
+        fast("label", {innerText: data.name, className: "ui-label center-text ui-title"}),
+        fast("label", {innerText: `Level ${data.requirements.level} Secret Discovery`, className: "ui-label center-text broad-text ui-subtitle"}),
+        fast("hr", {className: "ui-separator"}),
+        fast("label", {innerText: `Region: ${data.specialInfo}`, className: "ui-label small-text"}),
+    ]});
+    container.appendChild(parse_rewards_requirements(data));
+    ui.getContent().appendChild(container);
+};
+
+const generate_ui_world_discovery = (ui: UIPanel, data: JSON_Content_Item) => {
+    let container = fast("div", {className: "ui-container ui-padded", children: [
+        fast("label", {innerText: data.name, className: "ui-label center-text ui-title"}),
+        fast("label", {innerText: `Level ${data.requirements.level} World Discovery`, className: "ui-label center-text broad-text ui-subtitle"}),
+        fast("hr", {className: "ui-separator"}),
+    ]});
+    container.appendChild(parse_rewards_requirements(data));
+    ui.getContent().appendChild(container);
+};
+
+const generate_ui_territorial_discovery = (ui: UIPanel, data: JSON_Content_Item) => {
+    let container = fast("div", {className: "ui-container ui-padded", children: [
+        fast("label", {innerText: data.name, className: "ui-label center-text ui-title"}),
+        fast("label", {innerText: `Level ${data.requirements.level} Territory`, className: "ui-label center-text broad-text ui-subtitle"}),
+        fast("hr", {className: "ui-separator"}),
+    ]});
+    container.appendChild(parse_rewards_requirements(data));
+    ui.getContent().appendChild(container);
+};
+
+const generate_ui_lootrun = (ui: UIPanel, data: JSON_Content_Item) => {
+    let container = fast("div", {className: "ui-container ui-padded", children: [
+        fast("label", {innerText: data.name, className: "ui-label center-text ui-title"}),
+        fast("label", {innerText: `Level ${data.requirements.level} Lootrun Camp`, className: "ui-label center-text broad-text ui-subtitle"}),
+        fast("hr", {className: "ui-separator"}),
+        fast("label", {innerText: `Length: ${data.length}`, className: "ui-label small-text"}),
+        fast("label", {innerText: `Difficulty: ${data.difficulty}`, className: "ui-label broad-text small-text"}),
+    ]});
+    container.appendChild(parse_rewards_requirements(data));
+    ui.getContent().appendChild(container);
+};
+
+const generate_ui_raid = (ui: UIPanel, data: JSON_Content_Item) => {
+    let container = fast("div", {className: "ui-container ui-padded", children: [
+        fast("label", {innerText: data.name, className: "ui-label center-text ui-title"}),
+        fast("label", {innerText: `Level ${data.requirements.level} Raid`, className: "ui-label center-text broad-text ui-subtitle"}),
+        fast("hr", {className: "ui-separator"}),
+        fast("label", {innerText: `Length: ${data.length}`, className: "ui-label small-text"}),
+        fast("label", {innerText: `Difficulty: ${data.difficulty}`, className: "ui-label broad-text small-text"}),
+    ]});
+    container.appendChild(parse_rewards_requirements(data));
+    ui.getContent().appendChild(container);
+};
+
 const generate_ui_miniquest = (ui: UIPanel, data: JSON_Content_Item) => {
     let container = fast("div", {className: "ui-container ui-padded", children: [
         fast("label", {innerText: data.name, className: "ui-label center-text ui-title"})
