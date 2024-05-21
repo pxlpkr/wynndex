@@ -55,9 +55,7 @@ async function wdload_content(): Promise<Dict<JSON_Content_Item>> {
                 continue;
             }
 
-            if ([null, undefined, ""].includes(data[`${item.type}_${item.name}`][key]) || data[`${item.type}_${item.name}`][key].length == 0) {
-                data[`${item.type}_${item.name}`][key] = value;
-            }
+            data[`${item.type}_${item.name}`][key] = value;
         }
     }
 
@@ -66,6 +64,11 @@ async function wdload_content(): Promise<Dict<JSON_Content_Item>> {
         let color_format_index: number;
         while ((color_format_index = item.description.indexOf('\u00a7')) != -1) {
             item.description = item.description.slice(0, color_format_index) + item.description.slice(color_format_index + 2)
+        }
+        for (let i = 0; i < item.requirements.quests.length; i++) {
+            while ((color_format_index = item.requirements.quests[i].indexOf('\u058E')) != -1) {
+                item.requirements.quests[i] = item.requirements.quests[i].slice(0, color_format_index) + item.requirements.quests[i].slice(color_format_index + 2)
+            }
         }
     }
 

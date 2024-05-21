@@ -3,7 +3,7 @@
 }
 
 body {
-    margin: 0px;
+    margin: 0;
 
     overflow: hidden;
 }
@@ -114,6 +114,11 @@ body {
     padding-bottom: 10px;
 }
 
+.ui-subdiv {
+    width: 100%;
+    display: flex;
+}
+
 .ui-container {
     width: calc(100%);
 
@@ -126,7 +131,7 @@ body {
 }
 
 .ui-padded {
-    padding: 10px 10px 0px 10px;
+    padding: 10px 10px 0 10px;
 }
 
 .ui-horizontal {
@@ -141,7 +146,7 @@ body {
     color: #ffffff;
     display: block;
 
-    margin-bottom: 0px;
+    margin-bottom: 0;
     text-transform: capitalize;
 
     font-size: 16px;
@@ -207,18 +212,6 @@ body {
     border: 1px solid #ffffff;
 }
 
-
-.black {
-    background-image: url("/client/image/clouds.png");
-    background-size: cover;
-    opacity: 1;
-    /* background-color: #000000; */
-}
-
-.white {
-    background-color: #ffffff;
-}
-
 .is-fading-out {
     animation: fade-out 0.15s ease-in forwards;
 }
@@ -226,19 +219,19 @@ body {
 @keyframes fade-in {
     0% {
         opacity: 0;
-        translate: 0px 20px;
+        translate: 0 20px;
     } 100% {
         opacity: 1;
-        translate: 0px 0px;
+        translate: 0 0;
     }
 }
 
 @keyframes fade-out {
     0% {
         opacity: 1;
-        translate: 0px 0px;
+        translate: 0 0;
     } 100% {
         opacity: 0;
-        translate: 0px 20px;
+        translate: 0 20px;
     }
 }

@@ -967,5 +967,86 @@
             "y": 38,
             "z": -2755
         }
+    },
+    {
+        "type": "miniQuest",
+        "name": "Slay Creatures of the Void",
+        "location": {
+            "x": 2316,
+            "y": 118,
+            "z": -6894
+        }
+    },
+    {
+        "type": "dungeon",
+        "name": "Corrupted Decrepit Sewers",
+        "location": {
+            "x": -890,
+            "y": 0,
+            "z": -4940
+        }
+    },
+    {
+        "type": "dungeon",
+        "name": "Corrupted Infested Pit",
+        "location": {
+            "x": -865,
+            "y": 0,
+            "z": -4940
+        }
+    },
+    {
+        "type": "dungeon",
+        "name": "Corrupted Lost Sanctuary",
+        "location": {
+            "x": -840,
+            "y": 0,
+            "z": -4940
+        }
+    },
+    {
+        "type": "dungeon",
+        "name": "Corrupted Underworld Crypt",
+        "location": {
+            "x": -815,
+            "y": 0,
+            "z": -4940
+        }
+    },
+    {
+        "type": "dungeon",
+        "name": "Corrupted Sand-Swept Tomb",
+        "location": {
+            "x": -890,
+            "y": 0,
+            "z": -4915
+        }
+    },
+    {
+        "type": "dungeon",
+        "name": "Corrupted Ice Barrows",
+        "location": {
+            "x": -865,
+            "y": 0,
+            "z": -4915
+        }
+    },
+    {
+        "type": "dungeon",
+        "name": "Corrupted Undergrowth Ruins",
+        "location": {
+            "x": -840,
+            "y": 0,
+            "z": -4915
+        }
+    },
+    {
+        "type": "dungeon",
+        "name": "Corrupted Galleon\u0027s Graveyard",
+        "location": {
+            "x": -815,
+            "y": 0,
+            "z": -4915
+        }
     }
 ]

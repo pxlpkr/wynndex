@@ -15,11 +15,16 @@
 
 .ui-panel {
     width: fit-content !important;
+    min-width: 256px !important;
     display: inline-grid !important;
 }
 
+.ui-tabs {
+    table-layout: auto !important;
+}
+
 .ui-title {
-    font-weight: 800 !important;
+    font-weight: 10 !important;
     font-size: 200% !important;
 }
 
@@ -37,6 +42,12 @@
     border-bottom-style: solid;
 }
 
+.tiny-icon {
+    padding-right: 4px;
+    image-rendering: pixelated;
+    width: 24px;
+}
+
 /* .ui-panel {
     background-color: #d9a80bbb !important;
 } */
@@ -47,4 +58,9 @@
     left: 0;        top: 0;
 
     image-rendering: pixelated;
+}
+
+.filter-img {
+    padding-right: 8px;
+    cursor: pointer;
 }

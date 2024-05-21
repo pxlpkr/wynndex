@@ -1,26 +1,106 @@
-const parse_profession_levels = (inp) => {
-    let out = [];
-    for (const [key, value] of Object.entries(inp)) {
-        out.push(`${key} ${value}`);
+const parse_rewards_requirements = (data) => {
+    let o = fast("div");
+    if (data.requirements.quests.length > 0 || Object.keys(data.requirements.professionLevels).length > 0) {
+        let l = fast("label", { innerText: 'Requirements:', className: "ui-label broad-text small-text" });
+        for (const quest of data.requirements.quests) {
+            l.appendChild(fast("br"));
+            l.appendChild(fast("img", { src: "rsc/frame_quest_a.png", className: "tiny-icon" }));
+            l.innerHTML += quest;
+        }
+        for (const [prof, level] of Object.entries(data.requirements.professionLevels)) {
+            l.appendChild(fast("br"));
+            l.appendChild(fast("img", { src: `rsc/prof_${prof}.png`, className: "tiny-icon" }));
+            l.innerHTML += `${prof.charAt(0).toUpperCase()}${prof.slice(1)} ${level}`;
+        }
+        o.appendChild(l);
     }
-    return out;
+    if (data.rewards.length > 0) {
+        let l = fast("label", { innerText: 'Rewards:', className: "ui-label broad-text small-text" });
+        for (const reward of data.rewards) {
+            l.appendChild(fast("br"));
+            let s = reward.split(' ');
+            if (["Fishing", "Farming", "Woodcutting", "Mining"].includes(s[1])) {
+                l.appendChild(fast("img", { src: `rsc/prof_${s[1].toLowerCase()}_xp.png`, className: "tiny-icon" }));
+            }
+            else if (s[1] == "XP" || s[1] == "Combat") {
+                l.appendChild(fast("img", { src: `rsc/xp.png`, className: "tiny-icon" }));
+            }
+            else if (s[1] == "Emeralds") {
+                let count = parseInt(s[0]);
+                if (count < 64 * 8) {
+                    l.appendChild(fast("img", { src: `rsc/emerald.png`, className: "tiny-icon" }));
+                }
+                else if (count < 64 * 64) {
+                    l.appendChild(fast("img", { src: `rsc/emerald_block.png`, className: "tiny-icon" }));
+                }
+                else {
+                    l.appendChild(fast("img", { src: `rsc/emerald_liquid.png`, className: "tiny-icon" }));
+                }
+            }
+            else {
+                l.appendChild(fast("img", { src: `rsc/empty.png`, className: "tiny-icon" }));
+            }
+            l.innerHTML += reward;
+        }
+        o.appendChild(l);
+    }
+    return o;
+};
+const opt_filters = [
+    ["Quests", "quest", "rsc/frame_quest_a.png", "rsc/frame_quest.png"],
+    ["Mini-Quests", "miniQuest", "rsc/frame_miniquest_a.png", "rsc/frame_miniquest.png"],
+    ["Caves", "cave", "rsc/frame_cave_a.png", "rsc/frame_cave.png"],
+    ["Dungeons", "dungeon", "rsc/frame_dungeon_a.png", "rsc/frame_dungeon.png"],
+    ["Raids", "raid", "rsc/frame_raid_a.png", "rsc/frame_raid.png"],
+    ["Lootruns", "lootrunCamp", "rsc/frame_lootrun_a.png", "rsc/frame_lootrun.png"],
+    ["Boss Altars", "bossAltar", "rsc/frame_boss_a.png", "rsc/frame_boss.png"],
+    ["World Discoveries", "worldDiscovery", "rsc/frame_discovery_a.png", "rsc/frame_discovery.png"],
+    ["Territorial Discoveries", "territorialDiscovery", "rsc/frame_discovery_a.png", "rsc/frame_discovery.png"],
+    ["Secret Discoveries", "secretDiscovery", "rsc/frame_discovery_a.png", "rsc/frame_discovery.png"],
+];
+const generate_ui_opt_filter = (ui, _) => {
+    let item_1 = fast("div", { className: "ui-container ui-padded" });
+    item_1.style.minWidth = `${256 + 64}px`;
+    item_1.appendChild(fast("label", { innerText: "Filters", className: "ui-label center-text ui-title" }));
+    for (const item of opt_filters) {
+        let outer = fast("div", { className: "ui-subdiv" });
+        let img_button = fast("img", { className: "filter-img", src: (options.view[item[1]] ? item[2] : item[3]) });
+        let img_label = fast("label", { innerText: item[0], className: "ui-label ui-subtitle" });
+        img_button.addEventListener("click", () => {
+            if (options.view[item[1]]) {
+                img_button.src = item[3];
+            }
+            else {
+                img_button.src = item[2];
+            }
+            options.view[item[1]] = !options.view[item[1]];
+            updateVisibility();
+        });
+        outer.appendChild(img_button);
+        outer.appendChild(img_label);
+        item_1.appendChild(outer);
+    }
+    ui.getContent().appendChild(item_1);
 };
 const generate_ui_cave = (ui, data) => {
-    ui.getContent().appendChild(fast("div", { className: "ui-container ui-padded", children: [
+    let container = fast("div", { className: "ui-container ui-padded", children: [
             fast("label", { innerText: data.name, className: "ui-label center-text ui-title" }),
             fast("label", { innerText: `Level ${data.requirements.level} ${data.specialInfo ? data.specialInfo : data.type}`, className: "ui-label center-text broad-text ui-subtitle" }),
             fast("hr", { className: "ui-separator" }),
             fast("label", { innerText: `Length: ${data.length} (${data.lengthInfo})`, className: "ui-label small-text" }),
             fast("label", { innerText: `Difficulty: ${data.difficulty}`, className: "ui-label broad-text small-text" }),
-            fast("label", { innerText: `rewards: \n+ ${data.rewards.join("\n+ ")}`, className: "ui-label broad-text small-text" }),
-        ] }));
+        ] });
+    container.appendChild(parse_rewards_requirements(data));
+    ui.getContent().appendChild(container);
 };
 const generate_ui_bossaltar = (ui, data) => {
-    ui.getContent().appendChild(fast("div", { className: "ui-container ui-padded", children: [
+    let container = fast("div", { className: "ui-container ui-padded", children: [
             fast("label", { innerText: data.name, className: "ui-label center-text ui-title" }),
             fast("label", { innerText: `Level ${data.requirements.level} Boss Altar`, className: "ui-label center-text broad-text ui-subtitle" }),
             fast("hr", { className: "ui-separator" })
-        ] }));
+        ] });
+    container.appendChild(parse_rewards_requirements(data));
+    ui.getContent().appendChild(container);
 };
 const generate_ui_quest = (ui, data) => {
     let container = fast("div", { className: "ui-container ui-padded", children: [
@@ -30,13 +110,7 @@ const generate_ui_quest = (ui, data) => {
             fast("label", { innerText: `Length: ${data.length}`, className: "ui-label small-text" }),
             fast("label", { innerText: `Difficulty: ${data.difficulty}`, className: "ui-label broad-text small-text" }),
         ] });
-    if (data.requirements.quests.length > 0 || Object.keys(data.requirements.professionLevels).length > 0) {
-        container.appendChild(fast("label", { innerText: (`Requirements:` +
-                (data.requirements.quests.length > 0 ? `\n- ${data.requirements.quests.join("\n- ")}` : '') +
-                (Object.keys(data.requirements.professionLevels).length > 0 ? `\n- ${parse_profession_levels(data.requirements.professionLevels).join("\n- ")}` : '')),
-            className: "ui-label broad-text small-text" }));
-    }
-    container.appendChild(fast("label", { innerText: `Rewards: \n+ ${data.rewards.join("\n+ ")}`, className: "ui-label broad-text small-text" }));
+    container.appendChild(parse_rewards_requirements(data));
     ui.getContent().appendChild(container);
 };
 const generate_ui_miniquest = (ui, data) => {
@@ -53,7 +127,7 @@ const generate_ui_miniquest = (ui, data) => {
     container.appendChild(fast("hr", { className: "ui-separator" }));
     container.appendChild(fast("label", { innerText: `Length: ${data.length}`, className: "ui-label small-text" }));
     container.appendChild(fast("label", { innerText: `Difficulty: ${data.difficulty}`, className: "ui-label broad-text small-text" }));
-    container.appendChild(fast("label", { innerText: `Rewards: \n+ ${data.rewards.join("\n+ ")}`, className: "ui-label broad-text small-text" }));
+    container.appendChild(parse_rewards_requirements(data));
     ui.getContent().appendChild(container);
 };
 const generate_ui_dungeon = (ui, data) => {
@@ -64,15 +138,31 @@ const generate_ui_dungeon = (ui, data) => {
             fast("label", { innerText: `Length: ${data.length}`, className: "ui-label small-text" }),
             fast("label", { innerText: `Difficulty: ${data.difficulty}`, className: "ui-label broad-text small-text" }),
         ] });
-    if (data.requirements.quests.length > 0 || Object.keys(data.requirements.professionLevels).length > 0) {
-        container.appendChild(fast("label", { innerText: (`Requirements:` +
-                (data.requirements.quests.length > 0 ? `\n- ${data.requirements.quests.join("\n- ")}` : '') +
-                (Object.keys(data.requirements.professionLevels).length > 0 ? `\n- ${parse_profession_levels(data.requirements.professionLevels).join("\n- ")}` : '')),
-            className: "ui-label broad-text small-text" }));
-    }
-    container.appendChild(fast("label", { innerText: `Rewards: \n+ ${data.rewards.join("\n+ ")}`, className: "ui-label broad-text small-text" }));
+    container.appendChild(parse_rewards_requirements(data));
     ui.getContent().appendChild(container);
 };
+const options = {
+    "view": {
+        "quest": true,
+        "miniQuest": true,
+        "cave": true,
+        "secretDiscovery": false,
+        "worldDiscovery": false,
+        "territorialDiscovery": false,
+        "dungeon": true,
+        "raid": true,
+        "bossAltar": true,
+        "lootrunCamp": true
+    }
+};
+let canvas;
+function updateVisibility() {
+    for (const component of canvas.components) {
+        if ('update_visibility' in component) {
+            component.update_visibility();
+        }
+    }
+}
 document.addEventListener("DOMContentLoaded", async () => {
     let map_json = await (() => {
         return new Promise((resolve) => {
@@ -82,8 +172,21 @@ document.addEventListener("DOMContentLoaded", async () => {
                 .catch(err => { throw err; });
         });
     })();
-    let canvas = new AutoCanvas();
+    canvas = new AutoCanvas();
     window['debug'] = { 'canvas': canvas };
+    for (const part of map_json) {
+        if (part.name == "The Void") {
+            part.x1 = 1600;
+            part.z1 = -6000;
+        }
+        let map_fragment = wrap(new Image())
+            .set("src", part.url)
+            .unwrap();
+        let component = wrap(new ACC_Image(canvas, part.x1, part.z1))
+            .set('img', map_fragment)
+            .unwrap();
+        canvas.addComponent(component);
+    }
     canvas.transform.x = -470 + canvas.canvas.width / 2;
     canvas.transform.y = 1584 + canvas.canvas.height / 2;
     canvas.transform.scale = 1;
@@ -100,15 +203,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             document.removeEventListener('wheel', abort_zoom_callback);
         }
     }, 10);
-    for (const part of map_json) {
-        let map_fragment = wrap(new Image())
-            .set("src", part.url)
-            .unwrap();
-        let component = wrap(new ACC_Image(canvas, part.x1, part.z1))
-            .set('img', map_fragment)
-            .unwrap();
-        canvas.addComponent(component);
-    }
     let opt_filter = wrap(new Image())
         .set("src", "rsc/opt_filter.png")
         .unwrap();
@@ -116,10 +210,35 @@ document.addEventListener("DOMContentLoaded", async () => {
         .set('render_ignore_scaling', true)
         .set('render_ignore_translation', true)
         .set('render_hoisted', true)
-        .set('render_base_scale', 2)
+        .set('render_base_scale', 4)
         .set('img', opt_filter)
         .unwrap();
-    component.y.set(() => canvas.canvas.height - component.get_render_height(canvas.transform) - 4);
+    component.y.set(() => canvas.canvas.height - 72);
+    component.on_hover = (c) => c.y.addTask(new ACC_Task(-12, 150, ACC_EaseType.LINEAR));
+    component.on_hover_stop = (c) => c.y.addTask(new ACC_Task(12, 150, ACC_EaseType.LINEAR));
+    component.on_press = (c) => c.y.addTask(new ACC_Task(16, 100, ACC_EaseType.LINEAR));
+    component.on_release = (c) => c.y.addTask(new ACC_Task(-16, 100, ACC_EaseType.LINEAR));
+    component.on_click = (_) => {
+        let ui_id = 'opt_filter';
+        if (UIPanel.tryFetch('opt_filter')) {
+            UIPanel.tryFetch(ui_id).dispose();
+        }
+        else {
+            new UIPanel({
+                include_close: true,
+                include_navigation: false,
+                allow_dragging: false,
+                keep_visible: false,
+                unique_id: ui_id,
+                generator: {
+                    'type': 'opt_filter',
+                    'generator': generate_ui_opt_filter,
+                    'data': null
+                },
+                at: [0, 0]
+            });
+        }
+    };
     canvas.addComponent(component);
     let content = await wdload_content();
     let frame_boss_a = wrap(new Image()).set("src", "rsc/frame_boss_a.png").unwrap();
@@ -135,7 +254,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (!item.location) {
             continue;
         }
-        let component = build_poi(item, (() => {
+        let component = wrap(new ACC_Image(canvas, item.location.x, item.location.z))
+            .set('img', (() => {
             switch (item.type) {
                 case "quest": return frame_quest_a;
                 case "storylineQuest": return frame_story_a;
@@ -146,18 +266,81 @@ document.addEventListener("DOMContentLoaded", async () => {
                 case "lootrunCamp": return frame_lootrun_a;
                 case "raid": return frame_raid_a;
             }
-        })(), (() => {
-            switch (item.type) {
-                case "quest": return generate_ui_quest;
-                case "storylineQuest": return generate_ui_quest;
-                case "miniQuest": return generate_ui_miniquest;
-                case "cave": return generate_ui_cave;
-                case "dungeon": return generate_ui_dungeon;
-                case "bossAltar": return generate_ui_bossaltar;
-                case "lootrunCamp": return generate_ui_cave;
-                case "raid": return generate_ui_cave;
+        })())
+            .set('render_ignore_scaling', true)
+            .set('render_centered', true)
+            .set('render_base_scale', 2)
+            .set('update_visibility', () => {
+            if (item.type == "storylineQuest") {
+                component.enabled = options.view["quest"];
             }
-        })(), canvas);
+            else {
+                component.enabled = options.view[item.type];
+            }
+        })
+            .set('on_hover', (c) => {
+            c.render_base_scale.addTask(new ACC_Task(0.2, 100, ACC_EaseType.LINEAR));
+        })
+            .set('on_hover_stop', (c) => {
+            c.render_base_scale.addTask(new ACC_Task(-0.2, 100, ACC_EaseType.LINEAR));
+        })
+            .set('on_press', (c) => {
+            c.render_base_scale.addTask(new ACC_Task(-0.2, 40, ACC_EaseType.LINEAR));
+        })
+            .set('on_release', (c) => {
+            c.render_base_scale.addTask(new ACC_Task(0.2, 40, ACC_EaseType.LINEAR));
+        })
+            .set('on_click', (c) => {
+            let ui_id = `${item.type}_${item.name}`;
+            if (UIPanel.tryFetch(ui_id)) {
+                UIPanel.tryFetch(ui_id).dispose();
+            }
+            else {
+                let panelComponent = new ACC_Foreign(canvas, c.x.get(), c.y.get());
+                panelComponent.static_offset_x = c.get_render_width(canvas.transform) / 2 + 8;
+                panelComponent.static_offset_y = -c.get_render_width(canvas.transform) / 2;
+                panelComponent.obj = new UIPanel({
+                    include_close: true,
+                    include_navigation: true,
+                    allow_dragging: false,
+                    keep_visible: false,
+                    unique_id: ui_id,
+                    generator: {
+                        'type': item.type,
+                        'generator': (() => {
+                            switch (item.type) {
+                                case "quest": return generate_ui_quest;
+                                case "storylineQuest": return generate_ui_quest;
+                                case "miniQuest": return generate_ui_miniquest;
+                                case "cave": return generate_ui_cave;
+                                case "dungeon": return generate_ui_dungeon;
+                                case "bossAltar": return generate_ui_bossaltar;
+                                case "lootrunCamp": return generate_ui_cave;
+                                case "raid": return generate_ui_cave;
+                            }
+                        })(),
+                        'data': item
+                    },
+                    at: [0, 0]
+                });
+                panelComponent.refresh = ((ctx, transform) => {
+                    if (panelComponent.obj.panel.classList.contains('is-fading-out')) {
+                        canvas.removeComponent(panelComponent);
+                    }
+                    let x = `${panelComponent.get_render_x(transform).toFixed(0)}px`;
+                    let y = `${panelComponent.get_render_y(transform).toFixed(0)}px`;
+                    if (x != panelComponent.obj.panel.style.left) {
+                        panelComponent.obj.panel.style.left = x;
+                    }
+                    if (y != panelComponent.obj.panel.style.top) {
+                        panelComponent.obj.panel.style.top = y;
+                    }
+                    panelComponent.obj.updateContentSize();
+                });
+                canvas.addComponent(panelComponent);
+            }
+        })
+            .unwrap();
         canvas.addComponent(component);
     }
 });
@@ -192,15 +375,18 @@ async function wdload_content() {
             if (key == "name" || key == "type") {
                 continue;
             }
-            if ([null, undefined, ""].includes(data[`${item.type}_${item.name}`][key]) || data[`${item.type}_${item.name}`][key].length == 0) {
-                data[`${item.type}_${item.name}`][key] = value;
-            }
+            data[`${item.type}_${item.name}`][key] = value;
         }
     }
     for (const item of Object.values(data)) {
         let color_format_index;
         while ((color_format_index = item.description.indexOf('\u00a7')) != -1) {
             item.description = item.description.slice(0, color_format_index) + item.description.slice(color_format_index + 2);
+        }
+        for (let i = 0; i < item.requirements.quests.length; i++) {
+            while ((color_format_index = item.requirements.quests[i].indexOf('\u058E')) != -1) {
+                item.requirements.quests[i] = item.requirements.quests[i].slice(0, color_format_index) + item.requirements.quests[i].slice(color_format_index + 2);
+            }
         }
     }
     return data;
@@ -292,12 +478,14 @@ class AutoCanvas {
         this.render_loop_pid = setInterval(this.refresh.bind(this), 1000 / this.target_fps);
     }
     registerEventListeners() {
-        this.canvas.addEventListener("mousedown", (event) => {
+        document.addEventListener("mousedown", (event) => {
             this.mouse_state.pressed = true;
             this.mouse_state.pressed_x = event.x;
             this.mouse_state.pressed_y = event.y;
             this.transform.buffered_x = this.transform.x;
             this.transform.buffered_y = this.transform.y;
+        });
+        this.canvas.addEventListener("mousedown", (event) => {
             let found = false;
             for (let i = this.components.length - 1; i >= 0; i--) {
                 if (this.components[i].collide(this.transform, event.x, event.y, ACC_EventType.PRESS, found)) {
@@ -309,6 +497,8 @@ class AutoCanvas {
             if (this.mouse_state.pressed) {
                 this.mouse_state.pressed = false;
             }
+        });
+        this.canvas.addEventListener("mouseup", (event) => {
             let found = false;
             let drag_distance = ((this.mouse_state.pressed_x - event.x) ** 2 + (this.mouse_state.pressed_y - event.y) ** 2) ** 0.5;
             let event_type = drag_distance < 5 ? ACC_EventType.CLICK : ACC_EventType.RELEASE;
@@ -343,7 +533,7 @@ class AutoCanvas {
                 comp.on_resize(comp);
             }
         });
-        this.canvas.addEventListener("wheel", (event) => {
+        document.addEventListener("wheel", (event) => {
             this.zoom(event.deltaY, event.x, event.y);
         });
     }
@@ -375,6 +565,16 @@ class AutoCanvas {
             this._components_civilian.push(component);
         }
     }
+    removeComponent(component) {
+        if (component.render_hoisted) {
+            let i = this._components_priority.indexOf(component);
+            this._components_priority.splice(i, 1);
+        }
+        else {
+            let i = this._components_civilian.indexOf(component);
+            this._components_civilian.splice(i, 1);
+        }
+    }
     refresh() {
         let perf_start = performance.now();
         for (const component of this.components) {
@@ -393,9 +593,9 @@ class AutoCanvas {
             this.ctx.fillStyle = "white";
             this.ctx.fillText("Target MS: " + (1000 / this.target_fps).toFixed(0), 0, 20);
             this.ctx.fillStyle = "black";
-            this.ctx.fillText("Current MS: " + (this.render_time), 2, 42);
+            this.ctx.fillText("Current MS: " + (this.render_time).toFixed(0), 2, 42);
             this.ctx.fillStyle = "white";
-            this.ctx.fillText("Current MS: " + (this.render_time), 0, 40);
+            this.ctx.fillText("Current MS: " + (this.render_time).toFixed(0), 0, 40);
             let r_mouse_x = Math.round((this.mouse_state.x - this.transform.x) / this.transform.scale);
             let r_mouse_y = Math.round((this.mouse_state.y - this.transform.y) / this.transform.scale);
             this.ctx.fillStyle = "black";
@@ -420,6 +620,7 @@ class ACC_Component {
         this.render_base_scale = new ACC_Dynamic(1);
         this.is_hovering = false;
         this.is_clicked = false;
+        this.enabled = true;
         this.on_resize = () => {
             this.x.fix();
             this.y.fix();
@@ -492,10 +693,12 @@ class ACC_Image extends ACC_Component {
     }
     tick(dt) {
         super.tick(dt);
-        this.render_base_scale.tick(dt);
     }
     ;
     refresh(ctx, transform) {
+        if (!this.enabled) {
+            return;
+        }
         ctx.drawImage(this.img, this.get_render_x(transform), this.get_render_y(transform), this.get_render_width(transform), this.get_render_height(transform));
     }
     get_render_width(transform) {
@@ -533,6 +736,9 @@ class ACC_Image extends ACC_Component {
         return y;
     }
     collide(transform, client_x, client_y, type, override) {
+        if (!this.enabled) {
+            return false;
+        }
         let detected = override ? false : (client_x > this.get_render_x(transform) &&
             client_x < this.get_render_x(transform) + this.get_render_width(transform) &&
             client_y > this.get_render_y(transform) &&
@@ -611,6 +817,10 @@ class UIPanel {
         return ctx.value;
     }
     constructor(args) {
+        this.keep_visible = true;
+        if (args.keep_visible !== undefined) {
+            this.keep_visible = args.keep_visible;
+        }
         if (args.unique_id && document.getElementById(args.unique_id) != null) {
             return;
         }
@@ -638,8 +848,8 @@ class UIPanel {
         });
         if (args.allow_dragging) {
             this.bar.addEventListener('mousedown', (e) => {
-                var x = e.clientX, y = e.clientY;
-                var panel_x = this.panel.offsetLeft, panel_y = this.panel.offsetTop;
+                let x = e.clientX, y = e.clientY;
+                let panel_x = this.panel.offsetLeft, panel_y = this.panel.offsetTop;
                 function on_mouse_up(e) {
                     document.removeEventListener('mouseup', on_mouse_up_bind);
                     document.removeEventListener('mousemove', on_mouse_move_bind);
@@ -685,14 +895,17 @@ class UIPanel {
         generator.generator(this, generator.data);
     }
     updateContentSize(e) {
-        this.panel.style.top = `${Math.max(Math.min(this.panel.offsetTop, window.innerHeight - 32), 0)}px`;
-        this.panel.style.left = `${Math.max(Math.min(this.panel.offsetLeft, window.innerWidth - 96), -this.panel.clientWidth + 64)}px`;
-        this.content.style.maxHeight = `${window.innerHeight - this.content.getBoundingClientRect().y}px`;
+        if (this.keep_visible) {
+            this.panel.style.top = `${Math.max(Math.min(this.panel.offsetTop, window.innerHeight - 32), 0)}px`;
+            this.panel.style.left = `${Math.max(Math.min(this.panel.offsetLeft, window.innerWidth - 96), -this.panel.clientWidth + 64)}px`;
+            this.content.style.maxHeight = `${window.innerHeight - this.content.getBoundingClientRect().y}px`;
+        }
+        this.content.style.maxHeight = `${window.innerHeight}px`;
     }
     dispose(e) {
         window.removeEventListener("resize", this.resize_bind);
         this.panel.classList.add('is-fading-out');
-        setTimeout((() => { document.body.removeChild(this.panel); }).bind(this), 150);
+        setTimeout((() => { document.body.removeChild(this.panel); }), 150);
     }
     createTabs(...args) {
         let tab_row = fast("div", { className: "ui-tabs-row" });
@@ -799,5 +1012,24 @@ class Wrapper {
     }
     unwrap() {
         return this.object;
+    }
+}
+class ACC_Foreign extends ACC_Component {
+    constructor() {
+        super(...arguments);
+        this.static_offset_x = 0;
+        this.static_offset_y = 0;
+    }
+    get_render_x(transform) {
+        if (this.render_ignore_translation) {
+            return this.x.get();
+        }
+        return this.x.get() * transform.scale + transform.x + this.static_offset_x;
+    }
+    get_render_y(transform) {
+        if (this.render_ignore_translation) {
+            return this.y.get();
+        }
+        return this.y.get() * transform.scale + transform.y + this.static_offset_y;
     }
 }
