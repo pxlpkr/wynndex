@@ -71,3 +71,26 @@
     font-size: 28px !important;
     user-select: none;
 }
+
+.filter-search-bar {
+    background: #0006;
+    border-style: solid;
+    border-color: white;
+    border-width: 2px;
+
+    padding-left: 6px;
+
+    font-family: Wynncraft, Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
+    font-size: 28px;
+    color: #ffff;
+
+    outline: none;
+
+    transition: 0.1s;
+}
+
+.filter-result-img {
+    height: 38px;
+    image-rendering: pixelated;
+    margin-right: 8px;
+}

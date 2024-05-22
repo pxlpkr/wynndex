@@ -47,17 +47,38 @@ const parse_rewards_requirements = (data: JSON_Content_Item) => {
     return o;
 }
 
+function closest_match(filter: string, ignore: JSON_Content_Item[]): null | JSON_Content_Item {
+    let max_score = -1;
+    let best = null;
+    for (const item of Object.values(content)) {
+        if (ignore.includes(item)) {
+            continue;
+        }
+        if (item.name.toLowerCase() == filter.toLowerCase()) {
+            return item;
+        }
+        if (item.name.toLowerCase().startsWith(filter.toLowerCase()) && max_score < 5) {
+            max_score = 5;
+            best = item;
+        } else if (item.name.toLowerCase().includes(filter.toLowerCase()) && max_score < 2) {
+            max_score = 2;
+            best = item;
+        }
+    }
+    return best;
+}
+
 const opt_filters = [
-    ["Quests", "quest", "rsc/frame_quest_a.png", "rsc/frame_quest.png"],
-    ["Mini Quests", "miniQuest", "rsc/frame_miniquest_a.png", "rsc/frame_miniquest.png"],
-    ["Caves", "cave", "rsc/frame_cave_a.png", "rsc/frame_cave.png"],
-    ["Dungeons", "dungeon", "rsc/frame_dungeon_a.png", "rsc/frame_dungeon.png"],
-    ["Raids", "raid", "rsc/frame_raid_a.png", "rsc/frame_raid.png"],
-    ["Lootruns", "lootrunCamp", "rsc/frame_lootrun_a.png", "rsc/frame_lootrun.png"],
-    ["Boss Altars", "bossAltar", "rsc/frame_boss_a.png", "rsc/frame_boss.png"],
-    ["World Discoveries", "worldDiscovery", "rsc/frame_discovery_a.png", "rsc/frame_discovery.png"],
-    ["Territorial Discoveries", "territorialDiscovery", "rsc/frame_discovery_a.png", "rsc/frame_discovery.png"],
-    ["Secret Discoveries", "secretDiscovery", "rsc/frame_discovery_a.png", "rsc/frame_discovery.png"],
+    ["Quests", "quest"],
+    ["Mini Quests", "miniQuest"],
+    ["Caves", "cave"],
+    ["Dungeons", "dungeon"],
+    ["Raids", "raid"],
+    ["Lootruns", "lootrunCamp"],
+    ["Boss Altars", "bossAltar"],
+    ["World Discoveries", "worldDiscovery"],
+    ["Territorial Discoveries", "territorialDiscovery"],
+    ["Secret Discoveries", "secretDiscovery"]
 ]
 
 const generate_ui_opt_filter = (ui: UIPanel, _: null) => {
@@ -65,25 +86,77 @@ const generate_ui_opt_filter = (ui: UIPanel, _: null) => {
     item_1.style.minWidth = `${256+64}px`;
     item_1.appendChild(fast("label", {innerText: "Filters", className: "ui-label center-text ui-title"}));
 
+    let images = [];
     for (const item of opt_filters) {
         let outer = fast("div", {className: "ui-subdiv"});
-        let img_button = fast("img", {draggable: "false", className: "filter-img", src: (options.view[item[1]]? item[2] : item[3])});
+        let img_button = fast("img", {draggable: "false", className: "filter-img"});
+        img_button.src = (options.view[item[1]] ? match_type_frame_a_url(item[1]) : match_type_frame_url(item[1]));
+        images.push(img_button);
         let img_label = fast("label", {innerText: item[0], className: "ui-label opt_item"});
-        let press_callback = () => {
-            console.log("hey");
+        img_button.addEventListener("contextmenu", () => {
+            for (const opt of Object.keys(options.view)) {
+                options.view[opt] = false;
+            }
+            for (let i = 0; i < opt_filters.length; i++) {
+                images[i].src = match_type_frame_url(opt_filters[i][1]);
+            }
+            img_button.src = match_type_frame_a_url(item[1]);
+            options.view[item[1]] = true;
+        })
+        img_button.addEventListener("click", () => {
             if (options.view[item[1]]) {
-                img_button.src = item[3];
+                img_button.src = match_type_frame_url(item[1]);
             } else {
-                img_button.src = item[2];
+                img_button.src = match_type_frame_a_url(item[1]);
             }
             options.view[item[1]] = !options.view[item[1]];
-            updateVisibility();
-        };
-        img_button.addEventListener("click", press_callback);
+        });
         outer.appendChild(img_button);
         outer.appendChild(img_label);
         item_1.appendChild(outer);
     }
+
+    item_1.appendChild(fast("hr", {className: "ui-separator"}));
+
+    // Search results
+    let search_elements = [[], [], []];
+    let search_results = fast("div", {className: "ui-subdiv", style: "display: table"});
+    for (let i = 0; i < 3; i++) {
+        let inner = fast("div", {className: "ui-subdiv", style: "margin-top: 8px; display: flex"});
+        search_elements[i].push(fast("img", {src: "rsc/empty.png", className: "filter-result-img"}));
+        search_elements[i].push(fast("label", {className: "ui-label opt_item", style: "line-height: 80%; font-size: 22px !important"}));
+        inner.appendChild(search_elements[i][0]);
+        inner.appendChild(search_elements[i][1]);
+        search_results.appendChild(inner);
+    }
+
+    // Search bar
+    let search_bar = fast("input", {type: "text", className: "filter-search-bar", placeholder: "Search", value: options.filter});
+    search_bar.addEventListener("input", () => {
+        options.filter = search_bar.value;
+        if (search_bar.value.length == 0) {
+            item_1.removeChild(search_results);
+        } else if (!item_1.contains(search_results)) {
+            item_1.appendChild(search_results);
+        }
+
+        let matches: JSON_Content_Item[] = [];
+        for (let i = 0; i < 3; i++) {
+            matches.splice(0, 0, closest_match(search_bar.value, matches));
+            if (matches[0] == null) {
+                search_elements[i][0].src = "rsc/empty.png";
+                search_elements[i][1].innerText = "";
+                continue;
+            }
+            search_elements[i][0].src = match_type_frame_a_url(matches[0].type);
+            search_elements[i][1].innerText = matches[0].name;
+            search_elements[i][1].appendChild(fast("br"));
+            search_elements[i][1].innerText += `Level ${matches[0].requirements.level}`;
+        }
+
+        Object.values(content);
+    });
+    item_1.appendChild(search_bar);
 
     ui.getContent().appendChild(item_1);
 };

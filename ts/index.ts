@@ -1,30 +1,23 @@
-const options = {
-    "view": {
-        "quest": true,
-        "miniQuest": true,
-        "cave": true,
-        "secretDiscovery": false,
-        "worldDiscovery": false,
-        "territorialDiscovery": false,
-        "dungeon": true,
-        "raid": true,
-        "bossAltar": true,
-        "lootrunCamp": true
-    }
-};
-
-let canvas: AutoCanvas;
-
-function updateVisibility() {
-    for (const component of canvas.components) {
-        if ('update_visibility' in component) {
-            (component.update_visibility as () => void)();
-        }
-    }
-}
+document.addEventListener("contextmenu", (event) => {
+    event.stopPropagation();
+    event.preventDefault();
+    return false;
+})
 
 /* Main */
 document.addEventListener("DOMContentLoaded", async () => {
+    /* Get textures */
+    texture.frame_boss_a = wrap(new Image()).set("src", "rsc/frame_boss_a.png").unwrap();
+    texture.frame_cave_a = wrap(new Image()).set("src", "rsc/frame_cave_a.png").unwrap();
+    texture.frame_discovery_a = wrap(new Image()).set("src", "rsc/frame_discovery_a.png").unwrap();
+    texture.frame_dungeon_a = wrap(new Image()).set("src", "rsc/frame_dungeon_a.png").unwrap();
+    texture.frame_lootrun_a = wrap(new Image()).set("src", "rsc/frame_lootrun_a.png").unwrap();
+    texture.frame_miniquest_a = wrap(new Image()).set("src", "rsc/frame_miniquest_a.png").unwrap();
+    texture.frame_quest_a = wrap(new Image()).set("src", "rsc/frame_quest_a.png").unwrap();
+    texture.frame_raid_a = wrap(new Image()).set("src", "rsc/frame_raid_a.png").unwrap();
+    texture.frame_story_a = wrap(new Image()).set("src", "rsc/frame_story_a.png").unwrap();
+    texture.empty = wrap(new Image()).set("src", "rsc/empty.png").unwrap();
+
     /* Get Map JSON */
     let map_json: JSON_Wynntils_Map[] = await (() => {
         return new Promise((resolve) => {
@@ -111,44 +104,32 @@ document.addEventListener("DOMContentLoaded", async () => {
     canvas.addComponent(component);
 
     /* Make poi markers */
-    let content = await wdload_content();
-    let frame_boss_a: HTMLImageElement = wrap(new Image()).set("src", "rsc/frame_boss_a.png").unwrap();
-    let frame_cave_a: HTMLImageElement = wrap(new Image()).set("src", "rsc/frame_cave_a.png").unwrap();
-    let frame_discovery_a: HTMLImageElement = wrap(new Image()).set("src", "rsc/frame_discovery_a.png").unwrap();
-    let frame_dungeon_a: HTMLImageElement = wrap(new Image()).set("src", "rsc/frame_dungeon_a.png").unwrap();
-    let frame_lootrun_a: HTMLImageElement = wrap(new Image()).set("src", "rsc/frame_lootrun_a.png").unwrap();
-    let frame_miniquest_a: HTMLImageElement = wrap(new Image()).set("src", "rsc/frame_miniquest_a.png").unwrap();
-    let frame_quest_a: HTMLImageElement = wrap(new Image()).set("src", "rsc/frame_quest_a.png").unwrap();
-    let frame_raid_a: HTMLImageElement = wrap(new Image()).set("src", "rsc/frame_raid_a.png").unwrap();
-    let frame_story_a: HTMLImageElement = wrap(new Image()).set("src", "rsc/frame_story_a.png").unwrap();
+    content = await wdload_content();
     for (const [_, item] of Object.entries(content)) {
         if (!item.location) {
             continue;
         }
 
         let component: ACC_Image = wrap(new ACC_Image(canvas, item.location.x, item.location.z))
-            .set('img', (() => {switch(item.type) {
-                case "quest":           return frame_quest_a;
-                case "storylineQuest":  return frame_story_a;
-                case "miniQuest":       return frame_miniquest_a;
-                case "cave":            return frame_cave_a;
-                case "dungeon":         return frame_dungeon_a;
-                case "bossAltar":       return frame_boss_a;
-                case "lootrunCamp":     return frame_lootrun_a;
-                case "raid":            return frame_raid_a;
-                case "secretDiscovery": return frame_discovery_a;
-                case "worldDiscovery":  return frame_discovery_a;
-                case "territorialDiscovery": return frame_discovery_a;
-            }})())
+            .set('img', match_type_frame_a(item.type))
             .set('render_ignore_scaling', true)
             .set('render_centered', true)
             .set('render_base_scale', 2)
-            .set('update_visibility', () => {
+            .set('verify', () => {
                 if (item.type == "storylineQuest") {
-                    component.enabled = options.view["quest"];
-                } else {
-                    component.enabled = options.view[item.type];
+                    if (!options.view["quest"]) {
+                        return false;
+                    }
+                } else if (!options.view[item.type]) {
+                    return false;
                 }
+
+                if (options.filter.length > 0) {
+                    if (!item.name.toLowerCase().includes(options.filter.toLowerCase())) {
+                        return false;
+                    }
+                }
+                return true;
             })
             .set('on_hover', (c: ACC_Image) => {
                 c.render_base_scale.addTask(new ACC_Task(0.2, 100, ACC_EaseType.LINEAR));

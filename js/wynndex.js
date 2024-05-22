@@ -1,3 +1,80 @@
+const options = {
+    "view": {
+        "quest": true,
+        "miniQuest": true,
+        "cave": true,
+        "secretDiscovery": false,
+        "worldDiscovery": false,
+        "territorialDiscovery": false,
+        "dungeon": true,
+        "raid": true,
+        "bossAltar": true,
+        "lootrunCamp": true
+    },
+    "filter": ""
+};
+const texture = {
+    frame_boss_a: null,
+    frame_cave_a: null,
+    frame_discovery_a: null,
+    frame_dungeon_a: null,
+    frame_lootrun_a: null,
+    frame_miniquest_a: null,
+    frame_quest_a: null,
+    frame_raid_a: null,
+    frame_story_a: null,
+    empty: null
+};
+let canvas;
+let content;
+const match_type_frame_a = (type) => {
+    switch (type) {
+        case "quest": return texture.frame_quest_a;
+        case "storylineQuest": return texture.frame_story_a;
+        case "miniQuest": return texture.frame_miniquest_a;
+        case "cave": return texture.frame_cave_a;
+        case "dungeon": return texture.frame_dungeon_a;
+        case "bossAltar": return texture.frame_boss_a;
+        case "lootrunCamp": return texture.frame_lootrun_a;
+        case "raid": return texture.frame_raid_a;
+        case "secretDiscovery": return texture.frame_discovery_a;
+        case "worldDiscovery": return texture.frame_discovery_a;
+        case "territorialDiscovery": return texture.frame_discovery_a;
+        default: return texture.empty;
+    }
+};
+const match_type_frame_a_url = (type) => {
+    switch (type) {
+        case "quest": return "rsc/frame_quest_a.png";
+        case "storylineQuest": return "rsc/frame_story_a.png";
+        case "miniQuest": return "rsc/frame_miniquest_a.png";
+        case "cave": return "rsc/frame_cave_a.png";
+        case "dungeon": return "rsc/frame_dungeon_a.png";
+        case "bossAltar": return "rsc/frame_boss_a.png";
+        case "lootrunCamp": return "rsc/frame_lootrun_a.png";
+        case "raid": return "rsc/frame_raid_a.png";
+        case "secretDiscovery": return "rsc/frame_discovery_a.png";
+        case "worldDiscovery": return "rsc/frame_discovery_a.png";
+        case "territorialDiscovery": return "rsc/frame_discovery_a.png";
+        default: return "rsc/empty.png";
+    }
+};
+const match_type_frame_url = (type) => {
+    switch (type) {
+        case "quest": return "rsc/frame_quest.png";
+        case "storylineQuest": return "rsc/frame_story.png";
+        case "miniQuest": return "rsc/frame_miniquest.png";
+        case "cave": return "rsc/frame_cave.png";
+        case "dungeon": return "rsc/frame_dungeon.png";
+        case "bossAltar": return "rsc/frame_boss.png";
+        case "lootrunCamp": return "rsc/frame_lootrun.png";
+        case "raid": return "rsc/frame_raid.png";
+        case "secretDiscovery": return "rsc/frame_discovery.png";
+        case "worldDiscovery": return "rsc/frame_discovery.png";
+        case "territorialDiscovery": return "rsc/frame_discovery.png";
+        default: return "rsc/empty.png";
+    }
+};
 const parse_rewards_requirements = (data) => {
     let o = fast("div");
     if (data.requirements.quests.length > 0 || Object.keys(data.requirements.professionLevels).length > 0) {
@@ -52,42 +129,109 @@ const parse_rewards_requirements = (data) => {
     }
     return o;
 };
+function closest_match(filter, ignore) {
+    let max_score = -1;
+    let best = null;
+    for (const item of Object.values(content)) {
+        if (ignore.includes(item)) {
+            continue;
+        }
+        if (item.name.toLowerCase() == filter.toLowerCase()) {
+            return item;
+        }
+        if (item.name.toLowerCase().startsWith(filter.toLowerCase()) && max_score < 5) {
+            max_score = 5;
+            best = item;
+        }
+        else if (item.name.toLowerCase().includes(filter.toLowerCase()) && max_score < 2) {
+            max_score = 2;
+            best = item;
+        }
+    }
+    return best;
+}
 const opt_filters = [
-    ["Quests", "quest", "rsc/frame_quest_a.png", "rsc/frame_quest.png"],
-    ["Mini Quests", "miniQuest", "rsc/frame_miniquest_a.png", "rsc/frame_miniquest.png"],
-    ["Caves", "cave", "rsc/frame_cave_a.png", "rsc/frame_cave.png"],
-    ["Dungeons", "dungeon", "rsc/frame_dungeon_a.png", "rsc/frame_dungeon.png"],
-    ["Raids", "raid", "rsc/frame_raid_a.png", "rsc/frame_raid.png"],
-    ["Lootruns", "lootrunCamp", "rsc/frame_lootrun_a.png", "rsc/frame_lootrun.png"],
-    ["Boss Altars", "bossAltar", "rsc/frame_boss_a.png", "rsc/frame_boss.png"],
-    ["World Discoveries", "worldDiscovery", "rsc/frame_discovery_a.png", "rsc/frame_discovery.png"],
-    ["Territorial Discoveries", "territorialDiscovery", "rsc/frame_discovery_a.png", "rsc/frame_discovery.png"],
-    ["Secret Discoveries", "secretDiscovery", "rsc/frame_discovery_a.png", "rsc/frame_discovery.png"],
+    ["Quests", "quest"],
+    ["Mini Quests", "miniQuest"],
+    ["Caves", "cave"],
+    ["Dungeons", "dungeon"],
+    ["Raids", "raid"],
+    ["Lootruns", "lootrunCamp"],
+    ["Boss Altars", "bossAltar"],
+    ["World Discoveries", "worldDiscovery"],
+    ["Territorial Discoveries", "territorialDiscovery"],
+    ["Secret Discoveries", "secretDiscovery"]
 ];
 const generate_ui_opt_filter = (ui, _) => {
     let item_1 = fast("div", { className: "ui-container ui-padded" });
     item_1.style.minWidth = `${256 + 64}px`;
     item_1.appendChild(fast("label", { innerText: "Filters", className: "ui-label center-text ui-title" }));
+    let images = [];
     for (const item of opt_filters) {
         let outer = fast("div", { className: "ui-subdiv" });
-        let img_button = fast("img", { draggable: "false", className: "filter-img", src: (options.view[item[1]] ? item[2] : item[3]) });
+        let img_button = fast("img", { draggable: "false", className: "filter-img" });
+        img_button.src = (options.view[item[1]] ? match_type_frame_a_url(item[1]) : match_type_frame_url(item[1]));
+        images.push(img_button);
         let img_label = fast("label", { innerText: item[0], className: "ui-label opt_item" });
-        let press_callback = () => {
-            console.log("hey");
+        img_button.addEventListener("contextmenu", () => {
+            for (const opt of Object.keys(options.view)) {
+                options.view[opt] = false;
+            }
+            for (let i = 0; i < opt_filters.length; i++) {
+                images[i].src = match_type_frame_url(opt_filters[i][1]);
+            }
+            img_button.src = match_type_frame_a_url(item[1]);
+            options.view[item[1]] = true;
+        });
+        img_button.addEventListener("click", () => {
             if (options.view[item[1]]) {
-                img_button.src = item[3];
+                img_button.src = match_type_frame_url(item[1]);
             }
             else {
-                img_button.src = item[2];
+                img_button.src = match_type_frame_a_url(item[1]);
             }
             options.view[item[1]] = !options.view[item[1]];
-            updateVisibility();
-        };
-        img_button.addEventListener("click", press_callback);
+        });
         outer.appendChild(img_button);
         outer.appendChild(img_label);
         item_1.appendChild(outer);
     }
+    item_1.appendChild(fast("hr", { className: "ui-separator" }));
+    let search_elements = [[], [], []];
+    let search_results = fast("div", { className: "ui-subdiv", style: "display: table" });
+    for (let i = 0; i < 3; i++) {
+        let inner = fast("div", { className: "ui-subdiv", style: "margin-top: 8px; display: flex" });
+        search_elements[i].push(fast("img", { src: "rsc/empty.png", className: "filter-result-img" }));
+        search_elements[i].push(fast("label", { className: "ui-label opt_item", style: "line-height: 80%; font-size: 22px !important" }));
+        inner.appendChild(search_elements[i][0]);
+        inner.appendChild(search_elements[i][1]);
+        search_results.appendChild(inner);
+    }
+    let search_bar = fast("input", { type: "text", className: "filter-search-bar", placeholder: "Search", value: options.filter });
+    search_bar.addEventListener("input", () => {
+        options.filter = search_bar.value;
+        if (search_bar.value.length == 0) {
+            item_1.removeChild(search_results);
+        }
+        else if (!item_1.contains(search_results)) {
+            item_1.appendChild(search_results);
+        }
+        let matches = [];
+        for (let i = 0; i < 3; i++) {
+            matches.splice(0, 0, closest_match(search_bar.value, matches));
+            if (matches[0] == null) {
+                search_elements[i][0].src = "rsc/empty.png";
+                search_elements[i][1].innerText = "";
+                continue;
+            }
+            search_elements[i][0].src = match_type_frame_a_url(matches[0].type);
+            search_elements[i][1].innerText = matches[0].name;
+            search_elements[i][1].appendChild(fast("br"));
+            search_elements[i][1].innerText += `Level ${matches[0].requirements.level}`;
+        }
+        Object.values(content);
+    });
+    item_1.appendChild(search_bar);
     ui.getContent().appendChild(item_1);
 };
 const generate_ui_cave = (ui, data) => {
@@ -199,29 +343,22 @@ const generate_ui_dungeon = (ui, data) => {
     container.appendChild(parse_rewards_requirements(data));
     ui.getContent().appendChild(container);
 };
-const options = {
-    "view": {
-        "quest": true,
-        "miniQuest": true,
-        "cave": true,
-        "secretDiscovery": false,
-        "worldDiscovery": false,
-        "territorialDiscovery": false,
-        "dungeon": true,
-        "raid": true,
-        "bossAltar": true,
-        "lootrunCamp": true
-    }
-};
-let canvas;
-function updateVisibility() {
-    for (const component of canvas.components) {
-        if ('update_visibility' in component) {
-            component.update_visibility();
-        }
-    }
-}
+document.addEventListener("contextmenu", (event) => {
+    event.stopPropagation();
+    event.preventDefault();
+    return false;
+});
 document.addEventListener("DOMContentLoaded", async () => {
+    texture.frame_boss_a = wrap(new Image()).set("src", "rsc/frame_boss_a.png").unwrap();
+    texture.frame_cave_a = wrap(new Image()).set("src", "rsc/frame_cave_a.png").unwrap();
+    texture.frame_discovery_a = wrap(new Image()).set("src", "rsc/frame_discovery_a.png").unwrap();
+    texture.frame_dungeon_a = wrap(new Image()).set("src", "rsc/frame_dungeon_a.png").unwrap();
+    texture.frame_lootrun_a = wrap(new Image()).set("src", "rsc/frame_lootrun_a.png").unwrap();
+    texture.frame_miniquest_a = wrap(new Image()).set("src", "rsc/frame_miniquest_a.png").unwrap();
+    texture.frame_quest_a = wrap(new Image()).set("src", "rsc/frame_quest_a.png").unwrap();
+    texture.frame_raid_a = wrap(new Image()).set("src", "rsc/frame_raid_a.png").unwrap();
+    texture.frame_story_a = wrap(new Image()).set("src", "rsc/frame_story_a.png").unwrap();
+    texture.empty = wrap(new Image()).set("src", "rsc/empty.png").unwrap();
     let map_json = await (() => {
         return new Promise((resolve) => {
             fetch("https://raw.githubusercontent.com/Wynntils/WynntilsWebsite-API/master/maps/maps.json")
@@ -298,46 +435,31 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     };
     canvas.addComponent(component);
-    let content = await wdload_content();
-    let frame_boss_a = wrap(new Image()).set("src", "rsc/frame_boss_a.png").unwrap();
-    let frame_cave_a = wrap(new Image()).set("src", "rsc/frame_cave_a.png").unwrap();
-    let frame_discovery_a = wrap(new Image()).set("src", "rsc/frame_discovery_a.png").unwrap();
-    let frame_dungeon_a = wrap(new Image()).set("src", "rsc/frame_dungeon_a.png").unwrap();
-    let frame_lootrun_a = wrap(new Image()).set("src", "rsc/frame_lootrun_a.png").unwrap();
-    let frame_miniquest_a = wrap(new Image()).set("src", "rsc/frame_miniquest_a.png").unwrap();
-    let frame_quest_a = wrap(new Image()).set("src", "rsc/frame_quest_a.png").unwrap();
-    let frame_raid_a = wrap(new Image()).set("src", "rsc/frame_raid_a.png").unwrap();
-    let frame_story_a = wrap(new Image()).set("src", "rsc/frame_story_a.png").unwrap();
+    content = await wdload_content();
     for (const [_, item] of Object.entries(content)) {
         if (!item.location) {
             continue;
         }
         let component = wrap(new ACC_Image(canvas, item.location.x, item.location.z))
-            .set('img', (() => {
-            switch (item.type) {
-                case "quest": return frame_quest_a;
-                case "storylineQuest": return frame_story_a;
-                case "miniQuest": return frame_miniquest_a;
-                case "cave": return frame_cave_a;
-                case "dungeon": return frame_dungeon_a;
-                case "bossAltar": return frame_boss_a;
-                case "lootrunCamp": return frame_lootrun_a;
-                case "raid": return frame_raid_a;
-                case "secretDiscovery": return frame_discovery_a;
-                case "worldDiscovery": return frame_discovery_a;
-                case "territorialDiscovery": return frame_discovery_a;
-            }
-        })())
+            .set('img', match_type_frame_a(item.type))
             .set('render_ignore_scaling', true)
             .set('render_centered', true)
             .set('render_base_scale', 2)
-            .set('update_visibility', () => {
+            .set('verify', () => {
             if (item.type == "storylineQuest") {
-                component.enabled = options.view["quest"];
+                if (!options.view["quest"]) {
+                    return false;
+                }
             }
-            else {
-                component.enabled = options.view[item.type];
+            else if (!options.view[item.type]) {
+                return false;
             }
+            if (options.filter.length > 0) {
+                if (!item.name.toLowerCase().includes(options.filter.toLowerCase())) {
+                    return false;
+                }
+            }
+            return true;
         })
             .set('on_hover', (c) => {
             c.render_base_scale.addTask(new ACC_Task(0.2, 100, ACC_EaseType.LINEAR));
@@ -692,7 +814,6 @@ class ACC_Component {
         this.render_base_scale = new ACC_Dynamic(1);
         this.is_hovering = false;
         this.is_clicked = false;
-        this.enabled = true;
         this.on_resize = () => {
             this.x.fix();
             this.y.fix();
@@ -702,6 +823,7 @@ class ACC_Component {
         this.on_press = () => { };
         this.on_click = () => { };
         this.on_release = () => { };
+        this.verify = () => true;
         this.parent = parent;
         this.x = new ACC_Dynamic(x);
         this.y = new ACC_Dynamic(y);
@@ -712,7 +834,11 @@ class ACC_Component {
         this.render_base_scale.tick(dt);
     }
     ;
-    refresh(ctx, transform) { }
+    refresh(ctx, transform) {
+        if (!this.verify(this)) {
+            return;
+        }
+    }
     ;
     collide(transform, x, y, type, override) {
         return false;
@@ -758,6 +884,25 @@ class ACC_Dynamic {
         }
     }
 }
+class ACC_Foreign extends ACC_Component {
+    constructor() {
+        super(...arguments);
+        this.static_offset_x = 0;
+        this.static_offset_y = 0;
+    }
+    get_render_x(transform) {
+        if (this.render_ignore_translation) {
+            return this.x.get();
+        }
+        return this.x.get() * transform.scale + transform.x + this.static_offset_x;
+    }
+    get_render_y(transform) {
+        if (this.render_ignore_translation) {
+            return this.y.get();
+        }
+        return this.y.get() * transform.scale + transform.y + this.static_offset_y;
+    }
+}
 class ACC_Image extends ACC_Component {
     constructor() {
         super(...arguments);
@@ -768,7 +913,7 @@ class ACC_Image extends ACC_Component {
     }
     ;
     refresh(ctx, transform) {
-        if (!this.enabled) {
+        if (!this.verify(this)) {
             return;
         }
         ctx.drawImage(this.img, this.get_render_x(transform), this.get_render_y(transform), this.get_render_width(transform), this.get_render_height(transform));
@@ -808,7 +953,7 @@ class ACC_Image extends ACC_Component {
         return y;
     }
     collide(transform, client_x, client_y, type, override) {
-        if (!this.enabled) {
+        if (!this.verify(this)) {
             return false;
         }
         let detected = override ? false : (client_x > this.get_render_x(transform) &&
@@ -1056,7 +1201,9 @@ function fast(tag, args = {}) {
 class Returnable {
 }
 ;
-const wrap = (object) => new Wrapper(object);
+function wrap(object) {
+    return new Wrapper(object);
+}
 class Wrapper {
     constructor(object) {
         this.object = object;
@@ -1080,24 +1227,5 @@ class Wrapper {
     }
     unwrap() {
         return this.object;
-    }
-}
-class ACC_Foreign extends ACC_Component {
-    constructor() {
-        super(...arguments);
-        this.static_offset_x = 0;
-        this.static_offset_y = 0;
-    }
-    get_render_x(transform) {
-        if (this.render_ignore_translation) {
-            return this.x.get();
-        }
-        return this.x.get() * transform.scale + transform.x + this.static_offset_x;
-    }
-    get_render_y(transform) {
-        if (this.render_ignore_translation) {
-            return this.y.get();
-        }
-        return this.y.get() * transform.scale + transform.y + this.static_offset_y;
     }
 }
