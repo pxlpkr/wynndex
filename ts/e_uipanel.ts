@@ -51,7 +51,7 @@ function closest_match(filter: string, ignore: JSON_Content_Item[]): null | JSON
     let max_score = -1;
     let best = null;
     for (const item of Object.values(content)) {
-        if (ignore.includes(item)) {
+        if (ignore.includes(item) || !options.view[item.type != 'storylineQuest' ? item.type : 'quest']) {
             continue;
         }
         if (item.name.toLowerCase() == filter.toLowerCase()) {
@@ -67,6 +67,31 @@ function closest_match(filter: string, ignore: JSON_Content_Item[]): null | JSON
     }
     return best;
 }
+
+function update_search_results(search_bar, item_1, search_results, search_elements) {
+        options.filter = search_bar.value;
+        if (search_bar.value.length == 0) {
+            item_1.removeChild(search_results);
+        } else if (!item_1.contains(search_results)) {
+            item_1.appendChild(search_results);
+        }
+
+        let matches: JSON_Content_Item[] = [];
+        for (let i = 0; i < 3; i++) {
+            matches.splice(0, 0, closest_match(search_bar.value, matches));
+            if (matches[0] == null) {
+                search_elements[i][0].src = url.texture.empty;
+                search_elements[i][1].innerText = "";
+                continue;
+            }
+            search_elements[i][0].src = url.texture.frame_active[matches[0].type] || url.texture.empty;
+            search_elements[i][1].innerText = matches[0].name;
+            search_elements[i][1].appendChild(fast("br"));
+            search_elements[i][1].innerText += `Level ${matches[0].requirements.level}`;
+        }
+
+        Object.values(content);
+    }
 
 const opt_filters = [
     ["Quests", "quest"],
@@ -90,26 +115,30 @@ const generate_ui_opt_filter = (ui: UIPanel, _: null) => {
     for (const item of opt_filters) {
         let outer = fast("div", {className: "ui-subdiv"});
         let img_button = fast("img", {draggable: "false", className: "filter-img"});
-        img_button.src = (options.view[item[1]] ? match_type_frame_a_url(item[1]) : match_type_frame_url(item[1]));
+        if (options.view[item[1]]) {
+            img_button.src = url.texture.frame_active[item[1]];
+        } else {
+            img_button.src = url.texture.frame_inactive[item[1]];
+        }
         images.push(img_button);
         let img_label = fast("label", {innerText: item[0], className: "ui-label opt_item"});
         img_button.addEventListener("contextmenu", () => {
             for (const opt of Object.keys(options.view)) {
                 options.view[opt] = false;
             }
-            for (let i = 0; i < opt_filters.length; i++) {
-                images[i].src = match_type_frame_url(opt_filters[i][1]);
+            for (const [i, entry] of Object.entries(opt_filters)) {
+                images[i].src = url.texture.frame_inactive[entry[1]];
             }
-            img_button.src = match_type_frame_a_url(item[1]);
+            img_button.src = url.texture.frame_active[item[1]];
             options.view[item[1]] = true;
         })
         img_button.addEventListener("click", () => {
-            if (options.view[item[1]]) {
-                img_button.src = match_type_frame_url(item[1]);
-            } else {
-                img_button.src = match_type_frame_a_url(item[1]);
-            }
             options.view[item[1]] = !options.view[item[1]];
+            if (options.view[item[1]]) {
+                img_button.src = url.texture.frame_active[item[1]];
+            } else {
+                img_button.src = url.texture.frame_inactive[item[1]];
+            }
         });
         outer.appendChild(img_button);
         outer.appendChild(img_label);
@@ -132,30 +161,7 @@ const generate_ui_opt_filter = (ui: UIPanel, _: null) => {
 
     // Search bar
     let search_bar = fast("input", {type: "text", className: "filter-search-bar", placeholder: "Search", value: options.filter});
-    search_bar.addEventListener("input", () => {
-        options.filter = search_bar.value;
-        if (search_bar.value.length == 0) {
-            item_1.removeChild(search_results);
-        } else if (!item_1.contains(search_results)) {
-            item_1.appendChild(search_results);
-        }
-
-        let matches: JSON_Content_Item[] = [];
-        for (let i = 0; i < 3; i++) {
-            matches.splice(0, 0, closest_match(search_bar.value, matches));
-            if (matches[0] == null) {
-                search_elements[i][0].src = "rsc/empty.png";
-                search_elements[i][1].innerText = "";
-                continue;
-            }
-            search_elements[i][0].src = match_type_frame_a_url(matches[0].type);
-            search_elements[i][1].innerText = matches[0].name;
-            search_elements[i][1].appendChild(fast("br"));
-            search_elements[i][1].innerText += `Level ${matches[0].requirements.level}`;
-        }
-
-        Object.values(content);
-    });
+    search_bar.addEventListener("input", () => update_search_results(search_bar, item_1, search_results, search_elements));
     item_1.appendChild(search_bar);
 
     ui.getContent().appendChild(item_1);

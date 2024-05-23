@@ -1,10 +1,67 @@
-const WYNNTILS_API_CONTENT_BOOK = "https://raw.githubusercontent.com/Wynntils/Static-Storage/main/Data-Storage/raw/content/content_book_dump.json";
-const WYNNDEX_API_CONTENT_BOOK = "https://wynndex.github.io/api/content_book.json";
+async function await_event(object: HTMLElement, event: string) {
+    return await (() => new Promise((resolve) => object.addEventListener(event, resolve)))();
+}
+
+function travelPath(base: object, path: string[]): object {
+    for (const item of path) {
+        base = base[item];
+    }
+    return base;
+}
+
+/**
+ * Fetches all textures located in [url.texture] and saves HTMLImageElement(s)
+ * to [texture]
+ * Exits once all images are fully loaded
+ */
+async function fetch_textures() {
+    const inner_1 = (path: string[] = []) => {
+        const target = travelPath(url.texture, path);
+
+        for (const [id, obj] of Object.entries(target)) {
+            if (typeof obj == "object") {
+                inner_1([...path, id]);
+                continue;
+            }
+            travelPath(texture, path)[id] = wrap(new Image()).set("src", obj).unwrap();
+            console.log(`site/loading_resource: texture/${path.length>0? path + '/' : ''}${id}`);
+        }
+    };
+
+    inner_1();
+
+    const inner_2 = async (path: string[] = []) => {
+        const target = travelPath(texture, path);
+
+        for (const [id, obj] of Object.entries(target)) {
+            if (typeof obj == "object") {
+                await inner_2([...path, id]);
+                continue;
+            }
+            if (!(obj as HTMLImageElement).complete) {
+                await await_event(texture.frame_active[id], "loaded");
+            }
+        }
+    };
+
+    await inner_2();
+}
+
+async function fetch_map(): Promise<JSON_Wynntils_Map[]> {
+    return await (() => {
+        return new Promise((resolve) => {
+            fetch(url.wynntils.map_json)
+                .then(res => res.json())
+                .then(out => resolve(out))
+                .catch(err => {throw err});
+        })
+    })();
+}
 
 /**
  * Converts a JSON_Wynntils_Content_Book object obtained from Wynntils into
  * a list of internal JSON_Content_Item(s)
- * 
+ *
  * @param   content JSON_Wynntils_Content_Book-encoded data
  * @returns         JSON_Content_Item[]-encoded data
  */
@@ -18,15 +75,15 @@ function flatten_content(content: JSON_Wynntils_Content_Book): JSON_Content_Item
 
 /**
  * Loads content from the Wynntils and Wynndex APIs, returning an object
- * where 
- * 
+ * where
+ *
  * @returns         Dict containing content book items
  */
-async function wdload_content(): Promise<Dict<JSON_Content_Item>> {
+async function fetch_content(): Promise<Dict<JSON_Content_Item>> {
     // Get Wynntils data
     let content: JSON_Wynntils_Content_Book = await (() => {
         return new Promise((resolve) => {
-            fetch(WYNNTILS_API_CONTENT_BOOK)
+            fetch(url.wynntils.content_book_json)
                 .then(res => res.json())
                 .then(out => resolve(out))
                 .catch(err => {throw err});
@@ -36,7 +93,7 @@ async function wdload_content(): Promise<Dict<JSON_Content_Item>> {
     // Get Wynndex patches
     let content_patch: JSON_Content_Item[] = await (() => {
         return new Promise((resolve) => {
-            fetch(WYNNDEX_API_CONTENT_BOOK)
+            fetch(url.wynndex.content_book_json)
                 .then(res => res.json())
                 .then(out => resolve(out))
                 .catch(err => {throw err});
@@ -76,55 +133,9 @@ async function wdload_content(): Promise<Dict<JSON_Content_Item>> {
     // Check location data
     for (const item of Object.values(data)) {
         if (item.location == null) {
-            console.log(item.name);
+            // console.log(item.name);
         }
     }
 
     return data;
-}
-
-function build_poi(
-    item: JSON_Content_Item,
-    image: HTMLImageElement,
-    generator: (ui: UIPanel, opts: {[key: string]: any}) => void,
-    canvas: AutoCanvas
-) {
-    return wrap(new ACC_Image(canvas, item.location.x, item.location.z))
-            .set('img', image)
-            .set('render_ignore_scaling', true)
-            .set('render_centered', true)
-            .set('render_base_scale', 2)
-            .set('on_hover', (c: ACC_Image) => {
-                c.render_base_scale.addTask(new ACC_Task(0.2, 100, ACC_EaseType.LINEAR));
-            })
-            .set('on_hover_stop', (c: ACC_Image) => {
-                c.render_base_scale.addTask(new ACC_Task(-0.2, 100, ACC_EaseType.LINEAR));
-            })
-            .set('on_press', (c: ACC_Image) => {
-                c.render_base_scale.addTask(new ACC_Task(-0.2, 40, ACC_EaseType.LINEAR));
-            })
-            .set('on_release', (c: ACC_Image) => {
-                c.render_base_scale.addTask(new ACC_Task(0.2, 40, ACC_EaseType.LINEAR));
-            })
-            .set('on_click', (c: ACC_Image) => {
-                let ui_id = `${item.type}_${item.name}`;
-                if (UIPanel.tryFetch(ui_id)) {
-                    UIPanel.tryFetch(ui_id).dispose();
-                } else {
-                    new UIPanel({
-                        include_close: false,
-                        include_navigation: true,
-                        allow_dragging: false,
-                        unique_id: ui_id,
-                        generator: {
-                            'type': item.type,
-                            'generator': generator,
-                            'data': item
-                        },
-                        at: [c.get_render_x(canvas.transform) + c.get_render_width(canvas.transform) + 2,
-                            c.get_render_y(canvas.transform)]
-                    });
-                }
-            })
-            .unwrap();
 }

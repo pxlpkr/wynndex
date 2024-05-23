@@ -1,9 +1,45 @@
+/* Disable Selection*/
 * {
     -webkit-user-select: none;
     -ms-user-select: none;
     user-select: none;
 }
 
+/* Loading */
+.overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    width: 100vw;
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    overflow: hidden;
+    z-index: 100;
+    background-color: #f5e8c2ff;
+}
+
+.logo {
+    image-rendering: pixelated;
+    width: min(40vw, 40vh);
+}
+
+@keyframes fade-out-overlay {
+    0% {
+        opacity: 1;
+        visibility: visible;
+    } 100% {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+/* Other */
 @font-face {
     font-family: Wynncraft;
     src: url('../rsc/WynncraftResource-Regular.ttf');

@@ -1,80 +1,87 @@
-const options = {
-    "view": {
-        "quest": true,
-        "miniQuest": true,
-        "cave": true,
-        "secretDiscovery": false,
-        "worldDiscovery": false,
-        "territorialDiscovery": false,
-        "dungeon": true,
-        "raid": true,
-        "bossAltar": true,
-        "lootrunCamp": true
+const url = {
+    wynntils: {
+        map_json: "https://raw.githubusercontent.com/Wynntils/WynntilsWebsite-API/master/maps/maps.json",
+        content_book_json: "https://raw.githubusercontent.com/Wynntils/Static-Storage/main/Data-Storage/raw/content/content_book_dump.json"
     },
-    "filter": ""
+    wynndex: {
+        content_book_json: "https://wynndex.github.io/api/content_book.json"
+    },
+    texture: {
+        frame_active: {
+            quest: "rsc/frame_quest_a.png",
+            storylineQuest: "rsc/frame_story_a.png",
+            miniQuest: "rsc/frame_miniquest_a.png",
+            cave: "rsc/frame_cave_a.png",
+            dungeon: "rsc/frame_dungeon_a.png",
+            bossAltar: "rsc/frame_boss_a.png",
+            lootrunCamp: "rsc/frame_lootrun_a.png",
+            raid: "rsc/frame_raid_a.png",
+            secretDiscovery: "rsc/frame_discovery_a.png",
+            worldDiscovery: "rsc/frame_discovery_a.png",
+            territorialDiscovery: "rsc/frame_discovery_a.png"
+        },
+        frame_inactive: {
+            quest: "rsc/frame_quest.png",
+            storylineQuest: "rsc/frame_story.png",
+            miniQuest: "rsc/frame_miniquest.png",
+            cave: "rsc/frame_cave.png",
+            dungeon: "rsc/frame_dungeon.png",
+            bossAltar: "rsc/frame_boss.png",
+            lootrunCamp: "rsc/frame_lootrun.png",
+            raid: "rsc/frame_raid.png",
+            secretDiscovery: "rsc/frame_discovery.png",
+            worldDiscovery: "rsc/frame_discovery.png",
+            territorialDiscovery: "rsc/frame_discovery.png"
+        },
+        empty: "rsc/empty.png"
+    }
+};
+const options = {
+    view: {
+        quest: true,
+        miniQuest: true,
+        cave: true,
+        dungeon: true,
+        bossAltar: true,
+        lootrunCamp: true,
+        raid: true,
+        secretDiscovery: false,
+        worldDiscovery: false,
+        territorialDiscovery: false
+    },
+    filter: ""
 };
 const texture = {
-    frame_boss_a: null,
-    frame_cave_a: null,
-    frame_discovery_a: null,
-    frame_dungeon_a: null,
-    frame_lootrun_a: null,
-    frame_miniquest_a: null,
-    frame_quest_a: null,
-    frame_raid_a: null,
-    frame_story_a: null,
+    frame_active: {
+        quest: null,
+        storylineQuest: null,
+        miniQuest: null,
+        cave: null,
+        dungeon: null,
+        bossAltar: null,
+        lootrunCamp: null,
+        raid: null,
+        secretDiscovery: null,
+        worldDiscovery: null,
+        territorialDiscovery: null
+    },
+    frame_inactive: {
+        quest: null,
+        storylineQuest: null,
+        miniQuest: null,
+        cave: null,
+        dungeon: null,
+        bossAltar: null,
+        lootrunCamp: null,
+        raid: null,
+        secretDiscovery: null,
+        worldDiscovery: null,
+        territorialDiscovery: null
+    },
     empty: null
 };
 let canvas;
 let content;
-const match_type_frame_a = (type) => {
-    switch (type) {
-        case "quest": return texture.frame_quest_a;
-        case "storylineQuest": return texture.frame_story_a;
-        case "miniQuest": return texture.frame_miniquest_a;
-        case "cave": return texture.frame_cave_a;
-        case "dungeon": return texture.frame_dungeon_a;
-        case "bossAltar": return texture.frame_boss_a;
-        case "lootrunCamp": return texture.frame_lootrun_a;
-        case "raid": return texture.frame_raid_a;
-        case "secretDiscovery": return texture.frame_discovery_a;
-        case "worldDiscovery": return texture.frame_discovery_a;
-        case "territorialDiscovery": return texture.frame_discovery_a;
-        default: return texture.empty;
-    }
-};
-const match_type_frame_a_url = (type) => {
-    switch (type) {
-        case "quest": return "rsc/frame_quest_a.png";
-        case "storylineQuest": return "rsc/frame_story_a.png";
-        case "miniQuest": return "rsc/frame_miniquest_a.png";
-        case "cave": return "rsc/frame_cave_a.png";
-        case "dungeon": return "rsc/frame_dungeon_a.png";
-        case "bossAltar": return "rsc/frame_boss_a.png";
-        case "lootrunCamp": return "rsc/frame_lootrun_a.png";
-        case "raid": return "rsc/frame_raid_a.png";
-        case "secretDiscovery": return "rsc/frame_discovery_a.png";
-        case "worldDiscovery": return "rsc/frame_discovery_a.png";
-        case "territorialDiscovery": return "rsc/frame_discovery_a.png";
-        default: return "rsc/empty.png";
-    }
-};
-const match_type_frame_url = (type) => {
-    switch (type) {
-        case "quest": return "rsc/frame_quest.png";
-        case "storylineQuest": return "rsc/frame_story.png";
-        case "miniQuest": return "rsc/frame_miniquest.png";
-        case "cave": return "rsc/frame_cave.png";
-        case "dungeon": return "rsc/frame_dungeon.png";
-        case "bossAltar": return "rsc/frame_boss.png";
-        case "lootrunCamp": return "rsc/frame_lootrun.png";
-        case "raid": return "rsc/frame_raid.png";
-        case "secretDiscovery": return "rsc/frame_discovery.png";
-        case "worldDiscovery": return "rsc/frame_discovery.png";
-        case "territorialDiscovery": return "rsc/frame_discovery.png";
-        default: return "rsc/empty.png";
-    }
-};
 const parse_rewards_requirements = (data) => {
     let o = fast("div");
     if (data.requirements.quests.length > 0 || Object.keys(data.requirements.professionLevels).length > 0) {
@@ -133,7 +140,7 @@ function closest_match(filter, ignore) {
     let max_score = -1;
     let best = null;
     for (const item of Object.values(content)) {
-        if (ignore.includes(item)) {
+        if (ignore.includes(item) || !options.view[item.type != 'storylineQuest' ? item.type : 'quest']) {
             continue;
         }
         if (item.name.toLowerCase() == filter.toLowerCase()) {
@@ -149,6 +156,29 @@ function closest_match(filter, ignore) {
         }
     }
     return best;
+}
+function update_search_results(search_bar, item_1, search_results, search_elements) {
+    options.filter = search_bar.value;
+    if (search_bar.value.length == 0) {
+        item_1.removeChild(search_results);
+    }
+    else if (!item_1.contains(search_results)) {
+        item_1.appendChild(search_results);
+    }
+    let matches = [];
+    for (let i = 0; i < 3; i++) {
+        matches.splice(0, 0, closest_match(search_bar.value, matches));
+        if (matches[0] == null) {
+            search_elements[i][0].src = url.texture.empty;
+            search_elements[i][1].innerText = "";
+            continue;
+        }
+        search_elements[i][0].src = url.texture.frame_active[matches[0].type] || url.texture.empty;
+        search_elements[i][1].innerText = matches[0].name;
+        search_elements[i][1].appendChild(fast("br"));
+        search_elements[i][1].innerText += `Level ${matches[0].requirements.level}`;
+    }
+    Object.values(content);
 }
 const opt_filters = [
     ["Quests", "quest"],
@@ -170,27 +200,32 @@ const generate_ui_opt_filter = (ui, _) => {
     for (const item of opt_filters) {
         let outer = fast("div", { className: "ui-subdiv" });
         let img_button = fast("img", { draggable: "false", className: "filter-img" });
-        img_button.src = (options.view[item[1]] ? match_type_frame_a_url(item[1]) : match_type_frame_url(item[1]));
+        if (options.view[item[1]]) {
+            img_button.src = url.texture.frame_active[item[1]];
+        }
+        else {
+            img_button.src = url.texture.frame_inactive[item[1]];
+        }
         images.push(img_button);
         let img_label = fast("label", { innerText: item[0], className: "ui-label opt_item" });
         img_button.addEventListener("contextmenu", () => {
             for (const opt of Object.keys(options.view)) {
                 options.view[opt] = false;
             }
-            for (let i = 0; i < opt_filters.length; i++) {
-                images[i].src = match_type_frame_url(opt_filters[i][1]);
+            for (const [i, entry] of Object.entries(opt_filters)) {
+                images[i].src = url.texture.frame_inactive[entry[1]];
             }
-            img_button.src = match_type_frame_a_url(item[1]);
+            img_button.src = url.texture.frame_active[item[1]];
             options.view[item[1]] = true;
         });
         img_button.addEventListener("click", () => {
+            options.view[item[1]] = !options.view[item[1]];
             if (options.view[item[1]]) {
-                img_button.src = match_type_frame_url(item[1]);
+                img_button.src = url.texture.frame_active[item[1]];
             }
             else {
-                img_button.src = match_type_frame_a_url(item[1]);
+                img_button.src = url.texture.frame_inactive[item[1]];
             }
-            options.view[item[1]] = !options.view[item[1]];
         });
         outer.appendChild(img_button);
         outer.appendChild(img_label);
@@ -208,29 +243,7 @@ const generate_ui_opt_filter = (ui, _) => {
         search_results.appendChild(inner);
     }
     let search_bar = fast("input", { type: "text", className: "filter-search-bar", placeholder: "Search", value: options.filter });
-    search_bar.addEventListener("input", () => {
-        options.filter = search_bar.value;
-        if (search_bar.value.length == 0) {
-            item_1.removeChild(search_results);
-        }
-        else if (!item_1.contains(search_results)) {
-            item_1.appendChild(search_results);
-        }
-        let matches = [];
-        for (let i = 0; i < 3; i++) {
-            matches.splice(0, 0, closest_match(search_bar.value, matches));
-            if (matches[0] == null) {
-                search_elements[i][0].src = "rsc/empty.png";
-                search_elements[i][1].innerText = "";
-                continue;
-            }
-            search_elements[i][0].src = match_type_frame_a_url(matches[0].type);
-            search_elements[i][1].innerText = matches[0].name;
-            search_elements[i][1].appendChild(fast("br"));
-            search_elements[i][1].innerText += `Level ${matches[0].requirements.level}`;
-        }
-        Object.values(content);
-    });
+    search_bar.addEventListener("input", () => update_search_results(search_bar, item_1, search_results, search_elements));
     item_1.appendChild(search_bar);
     ui.getContent().appendChild(item_1);
 };
@@ -349,55 +362,30 @@ document.addEventListener("contextmenu", (event) => {
     return false;
 });
 document.addEventListener("DOMContentLoaded", async () => {
-    texture.frame_boss_a = wrap(new Image()).set("src", "rsc/frame_boss_a.png").unwrap();
-    texture.frame_cave_a = wrap(new Image()).set("src", "rsc/frame_cave_a.png").unwrap();
-    texture.frame_discovery_a = wrap(new Image()).set("src", "rsc/frame_discovery_a.png").unwrap();
-    texture.frame_dungeon_a = wrap(new Image()).set("src", "rsc/frame_dungeon_a.png").unwrap();
-    texture.frame_lootrun_a = wrap(new Image()).set("src", "rsc/frame_lootrun_a.png").unwrap();
-    texture.frame_miniquest_a = wrap(new Image()).set("src", "rsc/frame_miniquest_a.png").unwrap();
-    texture.frame_quest_a = wrap(new Image()).set("src", "rsc/frame_quest_a.png").unwrap();
-    texture.frame_raid_a = wrap(new Image()).set("src", "rsc/frame_raid_a.png").unwrap();
-    texture.frame_story_a = wrap(new Image()).set("src", "rsc/frame_story_a.png").unwrap();
-    texture.empty = wrap(new Image()).set("src", "rsc/empty.png").unwrap();
-    let map_json = await (() => {
-        return new Promise((resolve) => {
-            fetch("https://raw.githubusercontent.com/Wynntils/WynntilsWebsite-API/master/maps/maps.json")
-                .then(res => res.json())
-                .then(out => resolve(out))
-                .catch(err => { throw err; });
-        });
-    })();
     canvas = new AutoCanvas();
-    window['debug'] = { 'canvas': canvas };
+    await fetch_textures();
+    const map_json = await fetch_map();
+    let map_fragments = [];
     for (const part of map_json) {
         if (part.name == "The Void") {
             part.x1 = 1600;
             part.z1 = -6000;
         }
-        let map_fragment = wrap(new Image())
+        map_fragments.splice(0, 0, wrap(new Image())
             .set("src", part.url)
-            .unwrap();
+            .unwrap());
         let component = wrap(new ACC_Image(canvas, part.x1, part.z1))
-            .set('img', map_fragment)
+            .set('img', map_fragments[0])
             .unwrap();
         canvas.addComponent(component);
     }
-    canvas.transform.x = -470 + canvas.canvas.width / 2;
-    canvas.transform.y = 1584 + canvas.canvas.height / 2;
-    canvas.transform.scale = 1;
-    canvas.raw_zoom(2.5, canvas.canvas.width / 2, canvas.canvas.height / 2);
-    let abort_zoom = false;
-    let abort_zoom_callback = () => abort_zoom = true;
-    document.addEventListener('wheel', abort_zoom_callback);
-    let zoom_iter_count = 100;
-    let zoom_pid = setInterval(() => {
-        canvas.zoom(zoom_iter_count / 2, canvas.canvas.width / 2, canvas.canvas.height / 2);
-        zoom_iter_count -= 1;
-        if (zoom_iter_count <= 0 || abort_zoom) {
-            clearInterval(zoom_pid);
-            document.removeEventListener('wheel', abort_zoom_callback);
+    for (const img of map_fragments) {
+        if (!img.complete) {
+            console.log(`site/loading_map Await map fragment ${img.src}`);
+            await img.decode();
         }
-    }, 10);
+    }
+    content = await fetch_content();
     let opt_filter = wrap(new Image())
         .set("src", "rsc/opt_filter.png")
         .unwrap();
@@ -435,13 +423,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     };
     canvas.addComponent(component);
-    content = await wdload_content();
     for (const [_, item] of Object.entries(content)) {
         if (!item.location) {
             continue;
         }
         let component = wrap(new ACC_Image(canvas, item.location.x, item.location.z))
-            .set('img', match_type_frame_a(item.type))
+            .set('img', texture.frame_active[item.type])
             .set('render_ignore_scaling', true)
             .set('render_centered', true)
             .set('render_base_scale', 2)
@@ -532,100 +519,26 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
         canvas.addComponent(component);
     }
+    canvas.correctDimensions();
+    console.log("site/loading Finished!");
+    document.getElementById("loading-overlay").style.animation = 'fade-out-overlay 1s cubic-bezier(0.445, 0.05, 0.55, 0.95) forwards';
+    canvas.transform.x = -470 + canvas.canvas.width / 2;
+    canvas.transform.y = 1584 + canvas.canvas.height / 2;
+    canvas.transform.scale = 1;
+    canvas.raw_zoom(2.5, canvas.canvas.width / 2, canvas.canvas.height / 2);
+    let abort_zoom = false;
+    let abort_zoom_callback = () => abort_zoom = true;
+    document.addEventListener('wheel', abort_zoom_callback);
+    let zoom_iter_count = 100;
+    let zoom_pid = setInterval(() => {
+        canvas.zoom(zoom_iter_count / 2, canvas.canvas.width / 2, canvas.canvas.height / 2);
+        zoom_iter_count -= 1;
+        if (zoom_iter_count <= 0 || abort_zoom) {
+            clearInterval(zoom_pid);
+            document.removeEventListener('wheel', abort_zoom_callback);
+        }
+    }, 10);
 });
-const WYNNTILS_API_CONTENT_BOOK = "https://raw.githubusercontent.com/Wynntils/Static-Storage/main/Data-Storage/raw/content/content_book_dump.json";
-const WYNNDEX_API_CONTENT_BOOK = "https://wynndex.github.io/api/content_book.json";
-function flatten_content(content) {
-    return [].concat(content.cave, content.miniQuest, content.quest, content.bossAltar, content.dungeon, content.raid, content.lootrunCamp, content.secretDiscovery, content.territorialDiscovery, content.worldDiscovery);
-}
-async function wdload_content() {
-    let content = await (() => {
-        return new Promise((resolve) => {
-            fetch(WYNNTILS_API_CONTENT_BOOK)
-                .then(res => res.json())
-                .then(out => resolve(out))
-                .catch(err => { throw err; });
-        });
-    })();
-    let content_patch = await (() => {
-        return new Promise((resolve) => {
-            fetch(WYNNDEX_API_CONTENT_BOOK)
-                .then(res => res.json())
-                .then(out => resolve(out))
-                .catch(err => { throw err; });
-        });
-    })();
-    let data = {};
-    for (const item of flatten_content(content)) {
-        data[`${item.type}_${item.name}`] = item;
-    }
-    for (const item of content_patch) {
-        for (const [key, value] of Object.entries(item)) {
-            if (key == "name" || key == "type") {
-                continue;
-            }
-            data[`${item.type}_${item.name}`][key] = value;
-        }
-    }
-    for (const item of Object.values(data)) {
-        let color_format_index;
-        while ((color_format_index = item.description.indexOf('\u00a7')) != -1) {
-            item.description = item.description.slice(0, color_format_index) + item.description.slice(color_format_index + 2);
-        }
-        for (let i = 0; i < item.requirements.quests.length; i++) {
-            while ((color_format_index = item.requirements.quests[i].indexOf('\u058E')) != -1) {
-                item.requirements.quests[i] = item.requirements.quests[i].slice(0, color_format_index) + item.requirements.quests[i].slice(color_format_index + 2);
-            }
-        }
-    }
-    for (const item of Object.values(data)) {
-        if (item.location == null) {
-            console.log(item.name);
-        }
-    }
-    return data;
-}
-function build_poi(item, image, generator, canvas) {
-    return wrap(new ACC_Image(canvas, item.location.x, item.location.z))
-        .set('img', image)
-        .set('render_ignore_scaling', true)
-        .set('render_centered', true)
-        .set('render_base_scale', 2)
-        .set('on_hover', (c) => {
-        c.render_base_scale.addTask(new ACC_Task(0.2, 100, ACC_EaseType.LINEAR));
-    })
-        .set('on_hover_stop', (c) => {
-        c.render_base_scale.addTask(new ACC_Task(-0.2, 100, ACC_EaseType.LINEAR));
-    })
-        .set('on_press', (c) => {
-        c.render_base_scale.addTask(new ACC_Task(-0.2, 40, ACC_EaseType.LINEAR));
-    })
-        .set('on_release', (c) => {
-        c.render_base_scale.addTask(new ACC_Task(0.2, 40, ACC_EaseType.LINEAR));
-    })
-        .set('on_click', (c) => {
-        let ui_id = `${item.type}_${item.name}`;
-        if (UIPanel.tryFetch(ui_id)) {
-            UIPanel.tryFetch(ui_id).dispose();
-        }
-        else {
-            new UIPanel({
-                include_close: false,
-                include_navigation: true,
-                allow_dragging: false,
-                unique_id: ui_id,
-                generator: {
-                    'type': item.type,
-                    'generator': generator,
-                    'data': item
-                },
-                at: [c.get_render_x(canvas.transform) + c.get_render_width(canvas.transform) + 2,
-                    c.get_render_y(canvas.transform)]
-            });
-        }
-    })
-        .unwrap();
-}
 class ACC_TransformState {
     constructor() {
         this.x = 0;
@@ -1228,4 +1141,99 @@ class Wrapper {
     unwrap() {
         return this.object;
     }
+}
+async function await_event(object, event) {
+    return await (() => new Promise((resolve) => object.addEventListener(event, resolve)))();
+}
+function travelPath(base, path) {
+    for (const item of path) {
+        base = base[item];
+    }
+    return base;
+}
+async function fetch_textures() {
+    const inner_1 = (path = []) => {
+        const target = travelPath(url.texture, path);
+        for (const [id, obj] of Object.entries(target)) {
+            if (typeof obj == "object") {
+                inner_1([...path, id]);
+                continue;
+            }
+            travelPath(texture, path)[id] = wrap(new Image()).set("src", obj).unwrap();
+            console.log(`site/loading_resource: texture/${path.length > 0 ? path + '/' : ''}${id}`);
+        }
+    };
+    inner_1();
+    const inner_2 = async (path = []) => {
+        const target = travelPath(texture, path);
+        for (const [id, obj] of Object.entries(target)) {
+            if (typeof obj == "object") {
+                await inner_2([...path, id]);
+                continue;
+            }
+            if (!obj.complete) {
+                await await_event(texture.frame_active[id], "loaded");
+            }
+        }
+    };
+    await inner_2();
+}
+async function fetch_map() {
+    return await (() => {
+        return new Promise((resolve) => {
+            fetch(url.wynntils.map_json)
+                .then(res => res.json())
+                .then(out => resolve(out))
+                .catch(err => { throw err; });
+        });
+    })();
+}
+function flatten_content(content) {
+    return [].concat(content.cave, content.miniQuest, content.quest, content.bossAltar, content.dungeon, content.raid, content.lootrunCamp, content.secretDiscovery, content.territorialDiscovery, content.worldDiscovery);
+}
+async function fetch_content() {
+    let content = await (() => {
+        return new Promise((resolve) => {
+            fetch(url.wynntils.content_book_json)
+                .then(res => res.json())
+                .then(out => resolve(out))
+                .catch(err => { throw err; });
+        });
+    })();
+    let content_patch = await (() => {
+        return new Promise((resolve) => {
+            fetch(url.wynndex.content_book_json)
+                .then(res => res.json())
+                .then(out => resolve(out))
+                .catch(err => { throw err; });
+        });
+    })();
+    let data = {};
+    for (const item of flatten_content(content)) {
+        data[`${item.type}_${item.name}`] = item;
+    }
+    for (const item of content_patch) {
+        for (const [key, value] of Object.entries(item)) {
+            if (key == "name" || key == "type") {
+                continue;
+            }
+            data[`${item.type}_${item.name}`][key] = value;
+        }
+    }
+    for (const item of Object.values(data)) {
+        let color_format_index;
+        while ((color_format_index = item.description.indexOf('\u00a7')) != -1) {
+            item.description = item.description.slice(0, color_format_index) + item.description.slice(color_format_index + 2);
+        }
+        for (let i = 0; i < item.requirements.quests.length; i++) {
+            while ((color_format_index = item.requirements.quests[i].indexOf('\u058E')) != -1) {
+                item.requirements.quests[i] = item.requirements.quests[i].slice(0, color_format_index) + item.requirements.quests[i].slice(color_format_index + 2);
+            }
+        }
+    }
+    for (const item of Object.values(data)) {
+        if (item.location == null) {
+        }
+    }
+    return data;
 }

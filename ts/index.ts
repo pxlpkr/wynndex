@@ -1,3 +1,4 @@
+/* Prevent right clicking */
 document.addEventListener("contextmenu", (event) => {
     event.stopPropagation();
     event.preventDefault();
@@ -6,64 +7,40 @@ document.addEventListener("contextmenu", (event) => {
 
 /* Main */
 document.addEventListener("DOMContentLoaded", async () => {
-    /* Get textures */
-    texture.frame_boss_a = wrap(new Image()).set("src", "rsc/frame_boss_a.png").unwrap();
-    texture.frame_cave_a = wrap(new Image()).set("src", "rsc/frame_cave_a.png").unwrap();
-    texture.frame_discovery_a = wrap(new Image()).set("src", "rsc/frame_discovery_a.png").unwrap();
-    texture.frame_dungeon_a = wrap(new Image()).set("src", "rsc/frame_dungeon_a.png").unwrap();
-    texture.frame_lootrun_a = wrap(new Image()).set("src", "rsc/frame_lootrun_a.png").unwrap();
-    texture.frame_miniquest_a = wrap(new Image()).set("src", "rsc/frame_miniquest_a.png").unwrap();
-    texture.frame_quest_a = wrap(new Image()).set("src", "rsc/frame_quest_a.png").unwrap();
-    texture.frame_raid_a = wrap(new Image()).set("src", "rsc/frame_raid_a.png").unwrap();
-    texture.frame_story_a = wrap(new Image()).set("src", "rsc/frame_story_a.png").unwrap();
-    texture.empty = wrap(new Image()).set("src", "rsc/empty.png").unwrap();
-
-    /* Get Map JSON */
-    let map_json: JSON_Wynntils_Map[] = await (() => {
-        return new Promise((resolve) => {
-            fetch("https://raw.githubusercontent.com/Wynntils/WynntilsWebsite-API/master/maps/maps.json")
-                .then(res => res.json())
-                .then(out => resolve(out))
-                .catch(err => {throw err});
-        })
-    })();
-
+    // Build Canvas
     canvas = new AutoCanvas();
-    window['debug'] = {'canvas': canvas};
 
-    // Make map textures
+    // Fetch basic textures
+    await fetch_textures();
+
+    // Build map Textures
+    const map_json: JSON_Wynntils_Map[] = await fetch_map();
+    let map_fragments: HTMLImageElement[] = [];
     for (const part of map_json) {
         if (part.name == "The Void") {
             part.x1 = 1600;
             part.z1 = -6000;
         }
 
-        let map_fragment: HTMLImageElement = wrap(new Image())
+        map_fragments.splice(0, 0, wrap(new Image())
             .set("src", part.url)
-            .unwrap();
+            .unwrap()
+        );
         let component = wrap(new ACC_Image(canvas, part.x1, part.z1))
-            .set('img', map_fragment)
+            .set('img', map_fragments[0])
             .unwrap();
         canvas.addComponent(component);
     }
-    
-    // Zoom on page load
-    canvas.transform.x = -470 + canvas.canvas.width / 2; //265;
-    canvas.transform.y = 1584 + canvas.canvas.height / 2; //1981;
-    canvas.transform.scale = 1;
-    canvas.raw_zoom(2.5, canvas.canvas.width / 2, canvas.canvas.height / 2);
-    let abort_zoom = false;
-    let abort_zoom_callback = () => abort_zoom = true;
-    document.addEventListener('wheel', abort_zoom_callback);
-    let zoom_iter_count = 100;
-    let zoom_pid = setInterval(() => {
-        canvas.zoom(zoom_iter_count / 2, canvas.canvas.width / 2, canvas.canvas.height / 2);
-        zoom_iter_count -= 1;
-        if (zoom_iter_count <= 0 || abort_zoom) {
-            clearInterval(zoom_pid);
-            document.removeEventListener('wheel', abort_zoom_callback);
+
+    for (const img of map_fragments) {
+        if (!img.complete) {
+            console.log(`site/loading_map Await map fragment ${img.src}`);
+            await img.decode();
         }
-    }, 10);
+    }
+
+    // Fetch content
+    content = await fetch_content();
 
     /* Make settings textures */
     let opt_filter: HTMLImageElement = wrap(new Image())
@@ -104,14 +81,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     canvas.addComponent(component);
 
     /* Make poi markers */
-    content = await wdload_content();
     for (const [_, item] of Object.entries(content)) {
         if (!item.location) {
             continue;
         }
 
         let component: ACC_Image = wrap(new ACC_Image(canvas, item.location.x, item.location.z))
-            .set('img', match_type_frame_a(item.type))
+            .set('img', texture.frame_active[item.type])
             .set('render_ignore_scaling', true)
             .set('render_centered', true)
             .set('render_base_scale', 2)
@@ -201,4 +177,27 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
         canvas.addComponent(component);
     }
+
+    canvas.correctDimensions();
+
+    console.log("site/loading Finished!");
+    document.getElementById("loading-overlay").style.animation = 'fade-out-overlay 1s cubic-bezier(0.445, 0.05, 0.55, 0.95) forwards';
+
+    // Zoom on page load
+    canvas.transform.x = -470 + canvas.canvas.width / 2; //265;
+    canvas.transform.y = 1584 + canvas.canvas.height / 2; //1981;
+    canvas.transform.scale = 1;
+    canvas.raw_zoom(2.5, canvas.canvas.width / 2, canvas.canvas.height / 2);
+    let abort_zoom = false;
+    let abort_zoom_callback = () => abort_zoom = true;
+    document.addEventListener('wheel', abort_zoom_callback);
+    let zoom_iter_count = 100;
+    let zoom_pid = setInterval(() => {
+        canvas.zoom(zoom_iter_count / 2, canvas.canvas.width / 2, canvas.canvas.height / 2);
+        zoom_iter_count -= 1;
+        if (zoom_iter_count <= 0 || abort_zoom) {
+            clearInterval(zoom_pid);
+            document.removeEventListener('wheel', abort_zoom_callback);
+        }
+    }, 10);
 });
