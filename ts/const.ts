@@ -33,7 +33,9 @@ const url = {
             worldDiscovery: "rsc/frame_discovery.png",
             territorialDiscovery: "rsc/frame_discovery.png"
         },
-        empty: "rsc/empty.png"
+        empty: "rsc/empty.png",
+        map: {},
+        opt_filter: "rsc/opt_filter.png"
     }
 }
 
@@ -80,7 +82,9 @@ const texture = {
         worldDiscovery: null,
         territorialDiscovery: null
     },
-    empty: null
+    empty: null,
+    map: {},
+    opt_filter: null
 }
 
 let canvas: AutoCanvas;

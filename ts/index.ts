@@ -7,51 +7,49 @@ document.addEventListener("contextmenu", (event) => {
 
 /* Main */
 document.addEventListener("DOMContentLoaded", async () => {
+    let reporter = new ProgressReporter(0);
+
     // Build Canvas
     canvas = new AutoCanvas();
 
-    // Fetch basic textures
-    await fetch_textures();
-
-    // Build map Textures
+    // Query map textures
+    reporter.set_weight(5);
     const map_json: JSON_Wynntils_Map[] = await fetch_map();
-    let map_fragments: HTMLImageElement[] = [];
+    for (const part of map_json) {
+        url.texture.map[part.name] = part.url;
+    }
+    reporter.report(100, "Downloaded map data");
+
+    // Fetch all textures
+    reporter.set_weight(80);
+    await fetch_textures(reporter);
+
+    // Fetch content
+    reporter.set_weight(10);
+    content = await fetch_content();
+    reporter.report(100, `Loaded content book`);
+
+    // Create map elements
+    reporter.set_weight(5);
     for (const part of map_json) {
         if (part.name == "The Void") {
             part.x1 = 1600;
             part.z1 = -6000;
         }
 
-        map_fragments.splice(0, 0, wrap(new Image())
-            .set("src", part.url)
-            .unwrap()
-        );
         let component = wrap(new ACC_Image(canvas, part.x1, part.z1))
-            .set('img', map_fragments[0])
+            .set('img', texture.map[part.name])
             .unwrap();
         canvas.addComponent(component);
     }
 
-    for (const img of map_fragments) {
-        if (!img.complete) {
-            console.log(`site/loading_map Await map fragment ${img.src}`);
-            await img.decode();
-        }
-    }
-
-    // Fetch content
-    content = await fetch_content();
-
     /* Make settings textures */
-    let opt_filter: HTMLImageElement = wrap(new Image())
-        .set("src", "rsc/opt_filter.png")
-        .unwrap();
     let component: ACC_Image = wrap(new ACC_Image(canvas, 4, canvas.canvas.height - 2))
         .set('render_ignore_scaling', true)
         .set('render_ignore_translation', true)
         .set('render_hoisted', true)
         .set('render_base_scale', 4)
-        .set('img', opt_filter)
+        .set('img', texture.opt_filter)
         .unwrap();
     component.y.set(() => canvas.canvas.height - 72);
     component.on_hover = (c: ACC_Image) => c.y.addTask(new ACC_Task(-12, 150, ACC_EaseType.LINEAR));
@@ -179,7 +177,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     canvas.correctDimensions();
+    reporter.report(100, "Initialized map");
 
+    reporter.complete();
     console.log("site/loading Finished!");
     document.getElementById("loading-overlay").style.animation = 'fade-out-overlay 1s cubic-bezier(0.445, 0.05, 0.55, 0.95) forwards';
 

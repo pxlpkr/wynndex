@@ -3,6 +3,8 @@
     -webkit-user-select: none;
     -ms-user-select: none;
     user-select: none;
+
+    font-family: Wynncraft, Roboto, RobotoDraft, Helvetica, Arial, sans-serif !important;
 }
 
 /* Loading */
@@ -15,18 +17,13 @@
     height: 100vh;
 
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    text-align: center;
 
     overflow: hidden;
     z-index: 100;
     background-color: #f5e8c2ff;
-}
-
-.logo {
-    image-rendering: pixelated;
-    width: min(40vw, 40vh);
 }
 
 @keyframes fade-out-overlay {
@@ -39,14 +36,42 @@
     }
 }
 
+.logo {
+    image-rendering: pixelated;
+    width: min(40vw, 40vh);
+}
+
+.loading-bar {
+    background: #808080;
+    width: min(60vw, 60vh);
+
+    border-style: none;
+    border-radius: 15px;
+
+    margin-top: 20px;
+}
+
+.loading-progress {
+    background: lightgreen;
+    height: 2vh;
+    width: 5%;
+
+    border: 2px solid green;
+    border-radius: 15px;
+
+    transition: 0.5s;
+}
+
+.loading-status {
+    font-size: min(3vw, 3vh);
+    color: lightgreen;
+    text-shadow: 3px 3px green;
+}
+
 /* Other */
 @font-face {
     font-family: Wynncraft;
     src: url('../rsc/WynncraftResource-Regular.ttf');
-}
-
-.ui-content {
-    font-family: Wynncraft, Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
 }
 
 .ui-panel {
@@ -116,7 +141,6 @@
 
     padding-left: 6px;
 
-    font-family: Wynncraft, Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
     font-size: 28px;
     color: #ffff;
 

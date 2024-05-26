@@ -33,7 +33,9 @@ const url = {
             worldDiscovery: "rsc/frame_discovery.png",
             territorialDiscovery: "rsc/frame_discovery.png"
         },
-        empty: "rsc/empty.png"
+        empty: "rsc/empty.png",
+        map: {},
+        opt_filter: "rsc/opt_filter.png"
     }
 };
 const options = {
@@ -78,7 +80,9 @@ const texture = {
         worldDiscovery: null,
         territorialDiscovery: null
     },
-    empty: null
+    empty: null,
+    map: {},
+    opt_filter: null
 };
 let canvas;
 let content;
@@ -362,39 +366,36 @@ document.addEventListener("contextmenu", (event) => {
     return false;
 });
 document.addEventListener("DOMContentLoaded", async () => {
+    let reporter = new ProgressReporter(0);
     canvas = new AutoCanvas();
-    await fetch_textures();
+    reporter.set_weight(5);
     const map_json = await fetch_map();
-    let map_fragments = [];
+    for (const part of map_json) {
+        url.texture.map[part.name] = part.url;
+    }
+    reporter.report(100, "Downloaded map data");
+    reporter.set_weight(80);
+    await fetch_textures(reporter);
+    reporter.set_weight(10);
+    content = await fetch_content();
+    reporter.report(100, `Loaded content book`);
+    reporter.set_weight(5);
     for (const part of map_json) {
         if (part.name == "The Void") {
             part.x1 = 1600;
             part.z1 = -6000;
         }
-        map_fragments.splice(0, 0, wrap(new Image())
-            .set("src", part.url)
-            .unwrap());
         let component = wrap(new ACC_Image(canvas, part.x1, part.z1))
-            .set('img', map_fragments[0])
+            .set('img', texture.map[part.name])
             .unwrap();
         canvas.addComponent(component);
     }
-    for (const img of map_fragments) {
-        if (!img.complete) {
-            console.log(`site/loading_map Await map fragment ${img.src}`);
-            await img.decode();
-        }
-    }
-    content = await fetch_content();
-    let opt_filter = wrap(new Image())
-        .set("src", "rsc/opt_filter.png")
-        .unwrap();
     let component = wrap(new ACC_Image(canvas, 4, canvas.canvas.height - 2))
         .set('render_ignore_scaling', true)
         .set('render_ignore_translation', true)
         .set('render_hoisted', true)
         .set('render_base_scale', 4)
-        .set('img', opt_filter)
+        .set('img', texture.opt_filter)
         .unwrap();
     component.y.set(() => canvas.canvas.height - 72);
     component.on_hover = (c) => c.y.addTask(new ACC_Task(-12, 150, ACC_EaseType.LINEAR));
@@ -520,6 +521,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         canvas.addComponent(component);
     }
     canvas.correctDimensions();
+    reporter.report(100, "Initialized map");
+    reporter.complete();
     console.log("site/loading Finished!");
     document.getElementById("loading-overlay").style.animation = 'fade-out-overlay 1s cubic-bezier(0.445, 0.05, 0.55, 0.95) forwards';
     canvas.transform.x = -470 + canvas.canvas.width / 2;
@@ -539,6 +542,125 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }, 10);
 });
+class ProgressReporter {
+    constructor(initial) {
+        this.progress = initial;
+        this.progress_element = document.getElementById("loading-progress");
+        this.progress_status = document.getElementById("loading-status");
+        this.working_maximum = 100;
+        this.default_value = 10;
+    }
+    set_weight(value) {
+        this.working_maximum = value;
+    }
+    report(value, message) {
+        if (value == undefined) {
+            value = this.default_value;
+        }
+        this.report_raw(this.progress + value * this.working_maximum / 100, message);
+    }
+    report_raw(value, message) {
+        this.progress = value;
+        this.progress_element.style.width = `${Math.round(this.progress)}%`;
+        if (message != undefined) {
+            this.progress_status.innerText = message;
+        }
+    }
+    set_default(value) {
+        this.default_value = value;
+    }
+    complete(message) {
+        this.report_raw(100, message);
+    }
+}
+function travelPath(base, path) {
+    for (const item of path) {
+        base = base[item];
+    }
+    return base;
+}
+async function fetch_textures(reporter) {
+    const promises = [];
+    const inner_1 = (path = []) => {
+        const target = travelPath(url.texture, path);
+        const texture_target = travelPath(texture, path);
+        for (const [id, obj] of Object.entries(target)) {
+            if (typeof obj == "object") {
+                inner_1([...path, id]);
+                continue;
+            }
+            let texture = wrap(new Image()).set("src", obj).unwrap();
+            promises.push((resolve) => {
+                texture.addEventListener("load", () => {
+                    reporter.report(100 / promises.length, `Loaded ${obj}`);
+                    resolve(null);
+                });
+            });
+            texture_target[id] = texture;
+        }
+    };
+    inner_1();
+    await Promise.all(promises.map((x) => new Promise(x)));
+}
+async function fetch_map() {
+    return await (() => {
+        return new Promise((resolve) => {
+            fetch(url.wynntils.map_json)
+                .then(res => res.json())
+                .then(out => resolve(out))
+                .catch(err => { throw err; });
+        });
+    })();
+}
+function flatten_content(content) {
+    return [].concat(content.cave, content.miniQuest, content.quest, content.bossAltar, content.dungeon, content.raid, content.lootrunCamp, content.secretDiscovery, content.territorialDiscovery, content.worldDiscovery);
+}
+async function fetch_content() {
+    let content = await (() => {
+        return new Promise((resolve) => {
+            fetch(url.wynntils.content_book_json)
+                .then(res => res.json())
+                .then(out => resolve(out))
+                .catch(err => { throw err; });
+        });
+    })();
+    let content_patch = await (() => {
+        return new Promise((resolve) => {
+            fetch(url.wynndex.content_book_json)
+                .then(res => res.json())
+                .then(out => resolve(out))
+                .catch(err => { throw err; });
+        });
+    })();
+    let data = {};
+    for (const item of flatten_content(content)) {
+        data[`${item.type}_${item.name}`] = item;
+    }
+    for (const item of content_patch) {
+        for (const [key, value] of Object.entries(item)) {
+            if (key == "name" || key == "type") {
+                continue;
+            }
+            data[`${item.type}_${item.name}`][key] = value;
+        }
+    }
+    for (const item of Object.values(data)) {
+        let color_format_index;
+        while ((color_format_index = item.description.indexOf('\u00a7')) != -1) {
+            item.description = item.description.slice(0, color_format_index) + item.description.slice(color_format_index + 2);
+        }
+        for (let i = 0; i < item.requirements.quests.length; i++) {
+            while ((color_format_index = item.requirements.quests[i].indexOf('\u058E')) != -1) {
+                item.requirements.quests[i] = item.requirements.quests[i].slice(0, color_format_index) + item.requirements.quests[i].slice(color_format_index + 2);
+            }
+        }
+    }
+    for (const item of Object.values(data)) {
+        if (item.location == null) {
+        }
+    }
+    return data;
+}
 class ACC_TransformState {
     constructor() {
         this.x = 0;
@@ -1141,99 +1263,4 @@ class Wrapper {
     unwrap() {
         return this.object;
     }
-}
-async function await_event(object, event) {
-    return await (() => new Promise((resolve) => object.addEventListener(event, resolve)))();
-}
-function travelPath(base, path) {
-    for (const item of path) {
-        base = base[item];
-    }
-    return base;
-}
-async function fetch_textures() {
-    const inner_1 = (path = []) => {
-        const target = travelPath(url.texture, path);
-        for (const [id, obj] of Object.entries(target)) {
-            if (typeof obj == "object") {
-                inner_1([...path, id]);
-                continue;
-            }
-            travelPath(texture, path)[id] = wrap(new Image()).set("src", obj).unwrap();
-            console.log(`site/loading_resource: texture/${path.length > 0 ? path + '/' : ''}${id}`);
-        }
-    };
-    inner_1();
-    const inner_2 = async (path = []) => {
-        const target = travelPath(texture, path);
-        for (const [id, obj] of Object.entries(target)) {
-            if (typeof obj == "object") {
-                await inner_2([...path, id]);
-                continue;
-            }
-            if (!obj.complete) {
-                await await_event(texture.frame_active[id], "loaded");
-            }
-        }
-    };
-    await inner_2();
-}
-async function fetch_map() {
-    return await (() => {
-        return new Promise((resolve) => {
-            fetch(url.wynntils.map_json)
-                .then(res => res.json())
-                .then(out => resolve(out))
-                .catch(err => { throw err; });
-        });
-    })();
-}
-function flatten_content(content) {
-    return [].concat(content.cave, content.miniQuest, content.quest, content.bossAltar, content.dungeon, content.raid, content.lootrunCamp, content.secretDiscovery, content.territorialDiscovery, content.worldDiscovery);
-}
-async function fetch_content() {
-    let content = await (() => {
-        return new Promise((resolve) => {
-            fetch(url.wynntils.content_book_json)
-                .then(res => res.json())
-                .then(out => resolve(out))
-                .catch(err => { throw err; });
-        });
-    })();
-    let content_patch = await (() => {
-        return new Promise((resolve) => {
-            fetch(url.wynndex.content_book_json)
-                .then(res => res.json())
-                .then(out => resolve(out))
-                .catch(err => { throw err; });
-        });
-    })();
-    let data = {};
-    for (const item of flatten_content(content)) {
-        data[`${item.type}_${item.name}`] = item;
-    }
-    for (const item of content_patch) {
-        for (const [key, value] of Object.entries(item)) {
-            if (key == "name" || key == "type") {
-                continue;
-            }
-            data[`${item.type}_${item.name}`][key] = value;
-        }
-    }
-    for (const item of Object.values(data)) {
-        let color_format_index;
-        while ((color_format_index = item.description.indexOf('\u00a7')) != -1) {
-            item.description = item.description.slice(0, color_format_index) + item.description.slice(color_format_index + 2);
-        }
-        for (let i = 0; i < item.requirements.quests.length; i++) {
-            while ((color_format_index = item.requirements.quests[i].indexOf('\u058E')) != -1) {
-                item.requirements.quests[i] = item.requirements.quests[i].slice(0, color_format_index) + item.requirements.quests[i].slice(color_format_index + 2);
-            }
-        }
-    }
-    for (const item of Object.values(data)) {
-        if (item.location == null) {
-        }
-    }
-    return data;
 }

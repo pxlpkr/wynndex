@@ -1,5 +1,44 @@
-async function await_event(object: HTMLElement, event: string) {
-    return await (() => new Promise((resolve) => object.addEventListener(event, resolve)))();
+class ProgressReporter {
+    progress: number;
+    working_maximum: number;
+    progress_element: HTMLDivElement;
+    progress_status: HTMLDivElement;
+    default_value: number;
+
+    constructor(initial: number) {
+        this.progress = initial;
+        this.progress_element = document.getElementById("loading-progress") as HTMLImageElement;
+        this.progress_status = document.getElementById("loading-status") as HTMLImageElement;
+        this.working_maximum = 100;
+        this.default_value = 10;
+    }
+
+    public set_weight(value: number): void {
+        this.working_maximum = value;
+    }
+
+    public report(value?: number, message?: string): void {
+        if (value == undefined) {
+            value = this.default_value;
+        }
+        this.report_raw(this.progress + value * this.working_maximum / 100, message);
+    }
+
+    private report_raw(value: number, message?: string): void {
+        this.progress = value;
+        this.progress_element.style.width = `${Math.round(this.progress)}%`;
+        if (message != undefined) {
+            this.progress_status.innerText = message;
+        }
+    }
+
+    public set_default(value: number): void {
+        this.default_value = value;
+    }
+
+    public complete(message?: string) {
+        this.report_raw(100, message);
+    }
 }
 
 function travelPath(base: object, path: string[]): object {
@@ -14,37 +53,33 @@ function travelPath(base: object, path: string[]): object {
  * to [texture]
  * Exits once all images are fully loaded
  */
-async function fetch_textures() {
+async function fetch_textures(reporter: ProgressReporter) {
+    const promises: ((resolve: any) => void)[] = [];
+
+    // Begin loading of textures
     const inner_1 = (path: string[] = []) => {
         const target = travelPath(url.texture, path);
+        const texture_target = travelPath(texture, path);
 
         for (const [id, obj] of Object.entries(target)) {
             if (typeof obj == "object") {
                 inner_1([...path, id]);
                 continue;
             }
-            travelPath(texture, path)[id] = wrap(new Image()).set("src", obj).unwrap();
-            console.log(`site/loading_resource: texture/${path.length>0? path + '/' : ''}${id}`);
+            let texture = wrap(new Image()).set("src", obj).unwrap();
+            promises.push((resolve) => {
+                texture.addEventListener("load", () => {
+                    reporter.report(100 / promises.length, `Loaded ${obj}`);
+                    resolve(null);
+                });
+            });
+            texture_target[id] = texture;
         }
     };
 
     inner_1();
 
-    const inner_2 = async (path: string[] = []) => {
-        const target = travelPath(texture, path);
-
-        for (const [id, obj] of Object.entries(target)) {
-            if (typeof obj == "object") {
-                await inner_2([...path, id]);
-                continue;
-            }
-            if (!(obj as HTMLImageElement).complete) {
-                await await_event(texture.frame_active[id], "loaded");
-            }
-        }
-    };
-
-    await inner_2();
+    await Promise.all(promises.map((x) => new Promise(x)));
 }
 
 async function fetch_map(): Promise<JSON_Wynntils_Map[]> {
