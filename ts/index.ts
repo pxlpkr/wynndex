@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         canvas.addComponent(component);
     }
 
-    /* Make settings textures */
+    /* Make settings buttons */
     let component: ACC_Image = wrap(new ACC_Image(canvas, 4, canvas.canvas.height - 2))
         .set('render_ignore_scaling', true)
         .set('render_ignore_translation', true)
@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     /* Make poi markers */
     for (const [_, item] of Object.entries(content)) {
-        if (!item.location) {
+        if (item.location == undefined || typeof item.location === "string") {
             continue;
         }
 

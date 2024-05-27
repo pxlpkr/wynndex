@@ -16,8 +16,8 @@ const url = {
             bossAltar: "rsc/frame_boss_a.png",
             lootrunCamp: "rsc/frame_lootrun_a.png",
             raid: "rsc/frame_raid_a.png",
-            secretDiscovery: "rsc/frame_discovery_a.png",
-            worldDiscovery: "rsc/frame_discovery_a.png",
+            secretDiscovery: "rsc/frame_secret_a.png",
+            worldDiscovery: "rsc/frame_world_a.png",
             territorialDiscovery: "rsc/frame_discovery_a.png"
         },
         frame_inactive: {
@@ -425,7 +425,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
     canvas.addComponent(component);
     for (const [_, item] of Object.entries(content)) {
-        if (!item.location) {
+        if (item.location == undefined || typeof item.location === "string") {
             continue;
         }
         let component = wrap(new ACC_Image(canvas, item.location.x, item.location.z))
@@ -613,7 +613,7 @@ async function fetch_map() {
     })();
 }
 function flatten_content(content) {
-    return [].concat(content.cave, content.miniQuest, content.quest, content.bossAltar, content.dungeon, content.raid, content.lootrunCamp, content.secretDiscovery, content.territorialDiscovery, content.worldDiscovery);
+    return [].concat(content.territorialDiscovery, content.worldDiscovery, content.secretDiscovery, content.cave, content.miniQuest, content.quest, content.bossAltar, content.dungeon, content.raid, content.lootrunCamp);
 }
 async function fetch_content() {
     let content = await (() => {
@@ -641,6 +641,10 @@ async function fetch_content() {
             if (key == "name" || key == "type") {
                 continue;
             }
+            if (!Object.keys(data).includes(`${item.type}_${item.name}`)) {
+                console.log(`Unknown patch for: ${item.type}_${item.name}`);
+                continue;
+            }
             data[`${item.type}_${item.name}`][key] = value;
         }
     }
@@ -657,6 +661,7 @@ async function fetch_content() {
     }
     for (const item of Object.values(data)) {
         if (item.location == null) {
+            console.log(`No location for: ${item.type}_${item.name}`);
         }
     }
     return data;
@@ -707,6 +712,14 @@ class AutoCanvas {
         this.render_loop_pid = setInterval(this.refresh.bind(this), 1000 / this.target_fps);
     }
     registerEventListeners() {
+        if (this.debug_flag) {
+            document.addEventListener('copy', (event) => {
+                let r_mouse_x = Math.round((this.mouse_state.x - this.transform.x) / this.transform.scale);
+                let r_mouse_y = Math.round((this.mouse_state.y - this.transform.y) / this.transform.scale);
+                event.clipboardData.setData('text/plain', `"location": {"x": ${r_mouse_x}, "y": 0, "z": ${r_mouse_y}}`);
+                event.preventDefault();
+            });
+        }
         document.addEventListener("mousedown", (event) => {
             this.mouse_state.pressed = true;
             this.mouse_state.pressed_x = event.x;

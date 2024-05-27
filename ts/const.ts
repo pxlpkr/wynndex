@@ -16,8 +16,8 @@ const url = {
             bossAltar: "rsc/frame_boss_a.png",
             lootrunCamp: "rsc/frame_lootrun_a.png",
             raid: "rsc/frame_raid_a.png",
-            secretDiscovery: "rsc/frame_discovery_a.png",
-            worldDiscovery: "rsc/frame_discovery_a.png",
+            secretDiscovery: "rsc/frame_secret_a.png",
+            worldDiscovery: "rsc/frame_world_a.png",
             territorialDiscovery: "rsc/frame_discovery_a.png"
         },
         frame_inactive: {

@@ -102,9 +102,10 @@ async function fetch_map(): Promise<JSON_Wynntils_Map[]> {
  */
 function flatten_content(content: JSON_Wynntils_Content_Book): JSON_Content_Item[] {
     return [].concat(
+        content.territorialDiscovery, content.worldDiscovery,
+        content.secretDiscovery,
         content.cave, content.miniQuest, content.quest, content.bossAltar,
-        content.dungeon, content.raid, content.lootrunCamp, content.secretDiscovery,
-        content.territorialDiscovery, content.worldDiscovery
+        content.dungeon, content.raid, content.lootrunCamp
     )
 }
 
@@ -148,6 +149,10 @@ async function fetch_content(): Promise<Dict<JSON_Content_Item>> {
                 continue;
             }
 
+            if (!Object.keys(data).includes(`${item.type}_${item.name}`)) {
+                console.log(`Unknown patch for: ${item.type}_${item.name}`);
+                continue;
+            }
             data[`${item.type}_${item.name}`][key] = value;
         }
     }
@@ -168,7 +173,7 @@ async function fetch_content(): Promise<Dict<JSON_Content_Item>> {
     // Check location data
     for (const item of Object.values(data)) {
         if (item.location == null) {
-            // console.log(item.name);
+            console.log(`No location for: ${item.type}_${item.name}`);
         }
     }
 

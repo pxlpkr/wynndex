@@ -1972,7 +1972,7 @@
     },
     {
         "type": "secretDiscovery",
-        "name": "Beneath the Ruins",
+        "name": "Beneath the Roots",
         "location": {
             "x": 53,
             "y": 0,
@@ -2269,7 +2269,7 @@
     },
     {
         "type": "secretDiscovery",
-        "name": "Relos\u0027 Library",
+        "name": "Relos\u0027 Secret Library",
         "location": {
             "x": -1642,
             "y": 73,
@@ -2503,7 +2503,7 @@
     },
     {
         "type": "secretDiscovery",
-        "name": "Messengers from Beyond",
+        "name": "Messengers From Beyond",
         "location": {
             "x": -961,
             "y":  64,
@@ -2806,5 +2806,765 @@
             "y":  140,
             "z": -4686
         }
+    },
+
+    {
+      "type": "worldDiscovery",
+      "name": "???",
+      "location": "bossAltar_Bottomless Pit"
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "??????????",
+      "location": "bossAltar_Unknown Area"
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Abandoned Lumber Yard",
+      "location": {
+          "x": -196,
+          "y": 0,
+          "z": -915
+      }
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Abandoned Mines",
+      "location": {"x": 775, "y": 0, "z": -1301}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Aerie of the Recluse",
+      "location": "bossAltar_Aerie of the Recluse"
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Ahmsord",
+      "location": {"x": 1013, "y": 0, "z": -4548}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Aldorei Town",
+      "location": {"x": -292, "y": 0, "z": -4427}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Aldorei Valley",
+      "location": {"x": -517, "y": 0, "z": -4437}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Alekin Village",
+      "location": {"x": -173, "y": 0, "z": -1591}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Almuj",
+      "location": {"x": 912, "y": 0, "z": -1958}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Almuj Great River",
+      "location": {"x": 1244, "y": 0, "z": -1943}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Altar of Sanctification",
+      "location": "bossAltar_Altar of Sanctification"
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Ancient Nemract",
+      "location": {"x": 214, "y": 0, "z": -1886}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Arena of the Legends",
+      "location": "bossAltar_Arena of the Legends"
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Avos Territory",
+      "location": {"x": -1838, "y": 0, "z": -3124}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Bantisu Air Temple",
+      "location": {"x": 527, "y": 0, "z": -4803}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Bear Zoo",
+      "location": {"x": -347, "y": 0, "z": -2474}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Black Road",
+      "location": {"x": 626, "y": 0, "z": -1614}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Bob\u0027s Tomb",
+      "location": {"x": 278, "y": 0, "z": -758}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Bottomless Pit",
+      "location": "bossAltar_Bottomless Pit"
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Bovine Barn",
+      "location": "bossAltar_Bovine Barn"
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Bremminglar",
+      "location": {"x": 690, "y": 0, "z": -2087}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Bucie",
+      "location": {"x": -1448, "y": 0, "z": -4725}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Caritat Mansion",
+      "location": {"x": -1188, "y": 0, "z": -5163}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Carnivorous Creature",
+      "location": "cave_The Gwanari"
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Castle Dullahan",
+      "location": {"x": -1088, "y": 0, "z": -5606}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Centerworld Fortress",
+      "location": {"x": -1309, "y": 0, "z": -4813}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Challenge of the Blades",
+      "location": "bossAltar_Challenge of the Blades"
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Cinfras",
+      "location": {"x": -445, "y": 0, "z": -4939}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Corkus City",
+      "location": {"x": -1614, "y": 0, "z": -2923}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Crystal Falls",
+      "location": {"x": 604, "y": 0, "z": -5526}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Dark Forest Gate",
+      "location": {"x": -1241, "y": 0, "z": -5372}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Dark Obelisk",
+      "location": null
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Dead Island",
+      "location": {"x": 882, "y": 0, "z": -3940}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Death\u0027s Realm",
+      "location": {"x": 494, "y": 0, "z": -7784}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Delnar Manor",
+      "location": {"x": -921, "y": 0, "z": -775}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Detlas",
+      "location": {"x": 470, "y": 0, "z": -1581}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Detlas Suburbs",
+      "location": {"x": 221, "y": 0, "z": -1578}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Dogun\u0027s Retreat",
+      "location": null
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Dragon Skeleton",
+      "location": null
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Durum Isles",
+      "location": {"x": 438, "y": 0, "z": -2910}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Eagle Tribe",
+      "location": {"x": 1379, "y": 0, "z": -1594}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Efilim",
+      "location": {"x": -1080, "y": 0, "z": -5005}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Elkurn",
+      "location": {"x": -2, "y": 0, "z": -1157}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Eltom",
+      "location": {"x": 934, "y": 0, "z": -5492}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Emerald Trail",
+      "location": {"x": -582, "y": 0, "z": -1579}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Entamis Village",
+      "location": {"x": -527, "y": 0, "z": -297}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Eyeball Forest",
+      "location": {"x": 945, "y": 0, "z": -525}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Fallen Factory",
+      "location": {"x": -1625, "y": 0, "z": -2604}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Faltach Manor",
+      "location": {"x": -859, "y": 0, "z": -5145}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Fountain of Youth",
+      "location": {"x": -797, "y": 0, "z": -374}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Freezing Heights",
+      "location": null
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Gavel Gate",
+      "location": {"x": -1997, "y": 0, "z": -4428}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Gelibord",
+      "location": {"x": -999, "y": 0, "z": -5296}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Gert Camp",
+      "location": {"x": -48, "y": 0, "z": -5544}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Geyser Pit",
+      "location": "bossAltar_Geyser Pit"
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Gylia Watch Tower",
+      "location": {"x": -19, "y": 0, "z": -5412}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Half-Moon Island",
+      "location": {"x": 992, "y": 0, "z": -2596}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "House of Talor",
+      "location": {"x": -636, "y": 0, "z": -5317}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Iboju Village",
+      "location": {"x": -731, "y": 0, "z": -652}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Ice Islands",
+      "location": {"x": 945, "y": 0, "z": -3369}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Invaded Barracks",
+      "location": {"x": 1376, "y": 0, "z": -2239}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Iron Golem Factory",
+      "location": {"x": -2115, "y": 0, "z": -5567}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Isles of Fiction",
+      "location": {"x": -266, "y": 0, "z": -4042}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Jofash Docks",
+      "location": {"x": 1300, "y": 0, "z": -4087}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Jofash Tunnel",
+      "location": {"x": 1277, "y": 0, "z": -4233}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Kandon-Beda",
+      "location": {"x": 750, "y": 0, "z": -4428}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Karoc Quarry",
+      "location": {"x": -1643, "y": 0, "z": -4471}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Katoa Ranch",
+      "location": {"x": -800, "y": 0, "z": -1911}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Kitrios Barracks",
+      "location": {"x": 112, "y": 0, "z": -5376}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Lake Gylia",
+      "location": {"x": -126, "y": 0, "z": -5266}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Lazarus Pit",
+      "location": {"x": -950, "y": 0, "z": -5464}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Legendary Island",
+      "location": {"x": -1111, "y": 0, "z": -2446}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Letvus Airbase",
+      "location": {"x": -212, "y": 0, "z": -4949}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Lexdale",
+      "location": {"x": -603, "y": 0, "z": -5470}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Lexdale Penitentiary",
+      "location": {"x": -828, "y": 0, "z": -5555}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Light Forest Gate",
+      "location": {"x": -1188, "y": 0, "z": -4632}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Llevigar",
+      "location": {"x": -1997, "y": 0, "z": -4558}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Lusuco",
+      "location": {"x": -203, "y": 0, "z": -327}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Maex",
+      "location": null
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Mage Island",
+      "location": {"x": 890, "y": 0, "z": -2885}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Magmastream Core",
+      "location": "bossAltar_Magmastream Core"
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Maltic",
+      "location": {"x": -559, "y": 0, "z": -1947}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Maro Peaks",
+      "location": {"x": 186, "y": 0, "z": -3934}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Molten Heights Gate",
+      "location": null
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Monument to Siegfried",
+      "location": {"x": -365, "y": 0, "z": -4795}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Nemract",
+      "location": {"x": 133, "y": 0, "z": -2211}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Nesaak",
+      "location": {"x": 109, "y": 0, "z": -791}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Nest of the Grootslangs",
+      "location": null
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Nivla Woods",
+      "location": {"x": -323, "y": 0, "z": -1586}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "North Lusuco",
+      "location": {"x": -364, "y": 0, "z": -822}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Olmic Cathedral",
+      "location": {"x": 616, "y": 0, "z": -456}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Olux",
+      "location": {"x": -1718, "y": 0, "z": -5520}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Olux Lumber Yard",
+      "location": {"x": -1520, "y": 0, "z": -5524}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Orphion\u0027s Nexus of Light",
+      "location": null
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Owl Tribe",
+      "location": {"x": 1094, "y": 0, "z": -1623}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Ozoth\u0027s Spire",
+      "location": {"x": 170, "y": 0, "z": -5208}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Pigmen\u0027s Ravine",
+      "location": {"x": -731, "y": 0, "z": -1341}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Pirate Cove",
+      "location": {"x": -662, "y": 0, "z": -3159}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Pirate\u0027s Bay",
+      "location": {"x": 507, "y": 0, "z": -2107}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Plague Laboratory",
+      "location": "bossAltar_Plague Laboratory"
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Portal to Dern",
+      "location": {"x": 1320, "y": 0, "z": -397}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Prison of Souls",
+      "location": "bossAltar_Prison of Souls"
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Quartz Mansion",
+      "location": {"x": -1522, "y": 0, "z": -4383}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Ragni",
+      "location": {"x": -881, "y": 0, "z": -1576}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Raiders\u0027 Port",
+      "location": {"x": 1442, "y": 0, "z": -4344}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Relos",
+      "location": {"x": -1671, "y": 0, "z": -2356}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "River Sage",
+      "location": {"x": -1439, "y": 0, "z": -4807}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Rodoroc",
+      "location": null
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Rooster Island",
+      "location": {"x": -79, "y": 0, "z": -2520}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Roots of Corruption",
+      "location": {"x": 247, "y": 0, "z": -1291}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Rotten Passage",
+      "location": "bossAltar_Rotten Passage"
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Ruined Olmic City",
+      "location": {"x": 614, "y": 0, "z": -537}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Rymek",
+      "location": {"x": 1289, "y": 0, "z": -1310}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Sanctuary Bridge",
+      "location": {"x": -262, "y": 0, "z": -1031}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Savannah",
+      "location": {"x": 711, "y": 0, "z": -1869}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Seavale Reef",
+      "location": {"x": 327, "y": 0, "z": -3212}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Selchar",
+      "location": {"x": 113, "y": 0, "z": -3208}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Silverbull Company Headquarters",
+      "location": {"x": -118, "y": 0, "z": -4794}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Skiens Island",
+      "location": {"x": 436, "y": 0, "z": -3531}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Sunrise Canyon",
+      "location": "bossAltar_Sunrise Canyon"
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Taproot",
+      "location": {"x": -1329, "y": 0, "z": -5617}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Temple of Legends",
+      "location": {"x": -693, "y": 0, "z": -1031}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Ternaves",
+      "location": {"x": 821, "y": 0, "z": -1613}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Thanos",
+      "location": null
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "The Canyon Colossus",
+      "location": {"x": 687, "y": 0, "z": -4449}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "The Eldritch Outlook",
+      "location": {"x": 1292, "y": 0, "z": -818}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "The Forgery",
+      "location": {"x": -847, "y": 0, "z": -4927}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "The Gateway to Light",
+      "location": {"x": -1034, "y": 0, "z": -4338}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "The Great Bridge",
+      "location": {"x": -362, "y": 0, "z": -690}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "The Guild Hall",
+      "location": {"x": -304, "y": 0, "z": -4938}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "The House of Twain",
+      "location": {"x": 101, "y": 0, "z": -358}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "The Moon",
+      "location": null
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "The Qira Hive",
+      "location": {"x": 346, "y": 0, "z": -5534}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "The Shiar",
+      "location": {"x": -911, "y": 0, "z": -4508}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Thesead",
+      "location": {"x": 798, "y": 0, "z": -5081}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Time Valley",
+      "location": {"x": -524, "y": 0, "z": -1169}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Tower of Ascension",
+      "location": "quest_Tower of Ascension"
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Town of Lutho",
+      "location": {"x": 965, "y": 0, "z": -699}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Toxic Wastes",
+      "location": {"x": 954, "y": 0, "z": -929}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Tribal Sanctuary",
+      "location": "bossAltar_Tribal Sanctuary"
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Troms",
+      "location": {"x": -803, "y": 0, "z": -920}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Troms Castle",
+      "location": {"x": -845, "y": 0, "z": -835}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Upper Molten Heights",
+      "location": null
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Void Valley",
+      "location": {"x": 1248, "y": 0, "z": -960}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Volcanic Isles",
+      "location": {"x": -938, "y": 0, "z": -3698}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Worm Holes",
+      "location": "storylineQuest_Realm of Light I - The Worm Holes"
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "WynnExcavation Site A",
+      "location": "storylineQuest_WynnExcavation Site A"
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "WynnExcavation Site B",
+      "location": "storylineQuest_WynnExcavation Site B"
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "WynnExcavation Site D",
+      "location": {"x": -942, "y": 0, "z": -279}
+    },
+    {
+      "type": "worldDiscovery",
+      "name": "Zhight Island",
+      "location": {"x": -587, "y": 0, "z": -2801}
     }
 ]
